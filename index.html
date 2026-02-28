@@ -229,34 +229,41 @@ function getNextMission() {
     }
 }
 
-// データ取得と位置情報の関数（NetlifyファンクションURLを修正）
-async function fetchAndDisplay(lat, lng, rangeIndex = 2) {
+// 2. データを取りに行く関数（見つからなければ1000mまで段階的に広げる）
+async function fetchAndDisplay(lat, lng, rangeIndex = 1) { // range=1 (300m) からスタート
     const shopList = document.getElementById('shop-list');
-    const rangeLabels = {2: "500m", 3: "1000m", 5: "3000m"};
-    if(shopList) shopList.innerHTML = `<p style="text-align:center;">${rangeLabels[rangeIndex]}圏内を探索中...</p>`;
+    
+    // 表示用のラベル
+    const rangeLabels = {
+        1: "300m",  // 実質的な最小範囲
+        2: "500m",
+        3: "1000m"  // ここがMAX
+    };
+    
+    if(shopList) {
+        shopList.innerHTML = `<p style="text-align:center; font-size:0.9rem;">${rangeLabels[rangeIndex]}圏内を探索中...</p>`;
+    }
 
     try {
+        // エンドポイントはご自身で修正された /getShops を使用
         const response = await fetch(`/getShops?lat=${lat}&lng=${lng}&range=${rangeIndex}`);
         const data = await response.json();
 
-        if ((!data.results || !data.results.shop || data.results.shop.length === 0) && rangeIndex < 5) {
-            const nextRange = rangeIndex === 2 ? 3 : 5;
+        // お店が見つからなかった場合、かつ、まだ1000m(range=3)に達していない場合
+        if ((!data.results || !data.results.shop || data.results.shop.length === 0) && rangeIndex < 3) {
+            const nextRange = rangeIndex + 1; // 1→2, 2→3 と広げる
+            console.log(`${rangeLabels[rangeIndex]}で見つからないため、次は${rangeLabels[nextRange]}を検索します。`);
+            
+            // 次の範囲で再試行
             return fetchAndDisplay(lat, lng, nextRange);
         }
+
+        // 見つかった場合、または1000mまで探してダメだった場合に表示
         displayShops(data, rangeLabels[rangeIndex]);
+
     } catch (e) {
         if(shopList) shopList.innerHTML = '<p style="text-align:center;">エラーが発生しました。</p>';
-    }
-}
-
-function startGacha() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                fetchAndDisplay(position.coords.latitude, position.coords.longitude);
-            },
-            () => { alert("位置情報が許可されていません"); }
-        );
+        console.error("Fetch Error:", e);
     }
 }
 </script>
