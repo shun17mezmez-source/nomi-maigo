@@ -102,13 +102,7 @@
         </div>
     </div>
 
-    <div class="mission-unit">
-        <h3 class="order-hint" id="mission-text-2">店主のおすすめを聞け</h3>
-        <div class="mission-btns">
-            <img src="fail.png" class="m-img-btn" onclick="this.style.opacity='0.5'" alt="失敗">
-            <img src="achievement.png" class="m-img-btn" onclick="this.style.opacity='0.5'" alt="達成">
-        </div>
-    </div>
+    <div id="dynamic-mission-container"></div>
 
     <div class="footer-btns">
         <img src="exit.png" class="f-img-btn" onclick="location.reload()" alt="店を出る">
@@ -210,16 +204,45 @@ function displayShops(data, currentRange) {
     });
 }
 
-// 2. 次の迷子札（ランダムなお題）
 function getNextMission() {
-    const tasks = ["店主のおすすめを聞け", "隣の人と乾杯せよ", "本日のおすすめを注文せよ", "一番人気のつまみを頼め", "店員さんの名前を覚えろ", "揚げ物を1品頼め"];
-    const taskEl = document.getElementById('mission-text-2');
-    if(taskEl) {
-        taskEl.innerText = tasks[Math.floor(Math.random() * tasks.length)];
-        const missionUnit = taskEl.closest('.mission-unit');
-        const btns = missionUnit.querySelectorAll('.m-img-btn');
-        btns.forEach(btn => btn.style.opacity = "1");
-    }
+    const container = document.getElementById('dynamic-mission-container');
+    if (!container) return;
+
+    // 前に出した追加指令を消して入れ替える
+    container.innerHTML = ""; 
+
+    const tasks = [
+        "店主のおすすめを聞け",
+        "隣の人と乾杯せよ",
+        "本日のおすすめを注文せよ",
+        "一番人気のつまみを頼め",
+        "店員さんの名前を覚えろ",
+        "揚げ物を1品頼め",
+        "自分以外が頼んだ酒を頼め",
+        "おすすめの日本酒を聞け"
+    ];
+    const randomTask = tasks[Math.floor(Math.random() * tasks.length)];
+
+    // HTML要素をその場で生成
+    const newMission = document.createElement('div');
+    newMission.className = 'mission-unit';
+    newMission.style.marginTop = "20px";
+    newMission.style.borderTop = "1px dashed #ccc";
+    newMission.style.paddingTop = "20px";
+
+    newMission.innerHTML = `
+        <h3 class="order-hint">${randomTask}</h3>
+        <div class="mission-btns">
+            <img src="fail.png" class="m-img-btn" onclick="this.style.opacity='0.5'" alt="失敗">
+            <img src="achievement.png" class="m-img-btn" onclick="this.style.opacity='0.5'" alt="達成">
+        </div>
+    `;
+
+    // 画面にガッチャンコ
+    container.appendChild(newMission);
+
+    // 新しい指令が見えるようにスムーズにスクロール
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 }
 
 // 3. データ取得（300mから最大1000mまで再帰検索）
