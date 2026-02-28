@@ -315,7 +315,7 @@ async function fetchAndDisplay(lat, lng, rangeIndex = 2) {
     if(shopList) shopList.innerHTML = `<p style="text-align:center;">${rangeLabels[rangeIndex]}圏内を探索中...</p>`;
 
     try {
-        const response = await fetch(`/.netlify/functions/getShops?lat=${lat}&lng=${lng}&range=${rangeIndex}`);
+        const response = await fetch(`/api/getShops?lat=${lat}&lng=${lng}&range=${rangeIndex}`);
         const data = await response.json();
 
         if ((!data.results || !data.results.shop || data.results.shop.length === 0) && rangeIndex < 5) {
