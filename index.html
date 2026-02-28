@@ -143,7 +143,10 @@ function displayShops(data, currentRange) {
     const hint = document.getElementById('drink-hint');
     const drinks = ["生ビール", "ハイボール", "レモンサワー", "日本酒", "焼酎", "ウーロン茶", "カシオレ", "トマトハイ"];
 
-    if(hint) hint.innerText = "一杯目は " + drinks[Math.floor(Math.random() * drinks.length)];
+    // 迷子札の内容をランダムに決定
+    if(hint) {
+        hint.innerText = "一杯目は " + drinks[Math.floor(Math.random() * drinks.length)];
+    }
 
     if(!shopList) return;
     shopList.innerHTML = "";
@@ -153,11 +156,13 @@ function displayShops(data, currentRange) {
         return;
     }
 
+    // 検索範囲を表示
     const rangeText = document.createElement('p');
     rangeText.style = "font-size:0.8rem; color:#666; text-align:center;";
     rangeText.innerText = `(${currentRange}以内の結果)`;
     shopList.appendChild(rangeText);
 
+    // 3件ランダムに抽出
     const shops = data.results.shop.sort(() => 0.5 - Math.random()).slice(0, 3);
     
     shops.forEach(shop => {
@@ -174,14 +179,14 @@ function displayShops(data, currentRange) {
         `;
 
         shopCard.onclick = () => {
-            // 1. メイン要素をすべて隠す（お店候補を含むすべての .container を隠す）
+            // メイン要素を隠す
             const selectors = ['header', '.container', '.maigo-fuda', '#button-container'];
             selectors.forEach(sel => {
                 const elements = document.querySelectorAll(sel);
                 elements.forEach(el => el.style.display = 'none');
             });
 
-            // 2. 迷子札の連動（！を除去して「を頼め」に繋げる）
+            // 迷子札の連動
             const currentDrink = document.getElementById('drink-hint').innerText;
             const missionDrink = document.getElementById('mission-text-1');
             if(missionDrink) {
@@ -189,7 +194,7 @@ function displayShops(data, currentRange) {
                 missionDrink.innerText = cleanText + "を頼め";
             }
 
-            // 3. ミッション画面を表示し、選択したお店情報をコピー
+            // ミッション画面を表示
             const missionScreen = document.getElementById('mission-screen');
             if(missionScreen) {
                 missionScreen.style.display = 'block';
@@ -207,63 +212,44 @@ function displayShops(data, currentRange) {
 
 // 2. 次の迷子札（ランダムなお題）
 function getNextMission() {
-    const tasks = [
-        "店主のおすすめを聞け",
-        "隣の人と乾杯せよ",
-        "本日のおすすめを注文せよ",
-        "一番人気のつまみを頼め",
-        "店員さんの名前を覚えろ",
-        "揚げ物を1品頼め",
-        "自分以外が頼んだ酒を頼め",
-        "一気飲みを阻止せよ"
-    ];
+    const tasks = ["店主のおすすめを聞け", "隣の人と乾杯せよ", "本日のおすすめを注文せよ", "一番人気のつまみを頼め", "店員さんの名前を覚えろ", "揚げ物を1品頼め"];
     const taskEl = document.getElementById('mission-text-2');
     if(taskEl) {
-        const randomTask = tasks[Math.floor(Math.random() * tasks.length)];
-        taskEl.innerText = randomTask;
-        
-        // ボタンの押し跡（半透明）を元に戻す
+        taskEl.innerText = tasks[Math.floor(Math.random() * tasks.length)];
         const missionUnit = taskEl.closest('.mission-unit');
         const btns = missionUnit.querySelectorAll('.m-img-btn');
         btns.forEach(btn => btn.style.opacity = "1");
     }
 }
 
-// 2. データを取りに行く関数（見つからなければ1000mまで段階的に広げる）
-async function fetchAndDisplay(lat, lng, rangeIndex = 1) { // range=1 (300m) からスタート
+// 3. データ取得（300mから最大1000mまで再帰検索）
+async function fetchAndDisplay(lat, lng, rangeIndex = 1) {
     const shopList = document.getElementById('shop-list');
+    const rangeLabels = {1: "300m", 2: "500m", 3: "1000m"};
     
-    // 表示用のラベル
-    const rangeLabels = {
-        1: "300m",  // 実質的な最小範囲
-        2: "500m",
-        3: "1000m"  // ここがMAX
-    };
-    
-    if(shopList) {
-        shopList.innerHTML = `<p style="text-align:center; font-size:0.9rem;">${rangeLabels[rangeIndex]}圏内を探索中...</p>`;
-    }
+    if(shopList) shopList.innerHTML = `<p style="text-align:center;">${rangeLabels[rangeIndex]}圏内を探索中...</p>`;
 
     try {
-        // エンドポイントはご自身で修正された /getShops を使用
         const response = await fetch(`/getShops?lat=${lat}&lng=${lng}&range=${rangeIndex}`);
         const data = await response.json();
 
-        // お店が見つからなかった場合、かつ、まだ1000m(range=3)に達していない場合
+        // 店がない場合は範囲を広げて再検索（最大range=3まで）
         if ((!data.results || !data.results.shop || data.results.shop.length === 0) && rangeIndex < 3) {
-            const nextRange = rangeIndex + 1; // 1→2, 2→3 と広げる
-            console.log(`${rangeLabels[rangeIndex]}で見つからないため、次は${rangeLabels[nextRange]}を検索します。`);
-            
-            // 次の範囲で再試行
-            return fetchAndDisplay(lat, lng, nextRange);
+            return fetchAndDisplay(lat, lng, rangeIndex + 1);
         }
-
-        // 見つかった場合、または1000mまで探してダメだった場合に表示
         displayShops(data, rangeLabels[rangeIndex]);
-
     } catch (e) {
-        if(shopList) shopList.innerHTML = '<p style="text-align:center;">エラーが発生しました。</p>';
-        console.error("Fetch Error:", e);
+        if(shopList) shopList.innerHTML = '<p style="text-align:center;">通信エラーが発生しました。</p>';
+    }
+}
+
+// 4. ガチャ開始ボタン
+function startGacha() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (pos) => fetchAndDisplay(pos.coords.latitude, pos.coords.longitude),
+            () => alert("位置情報を許可してください")
+        );
     }
 }
 </script>
