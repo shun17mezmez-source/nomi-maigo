@@ -6,124 +6,117 @@
     <title>呑み迷子 - NOMI-MAIGO</title>
     <link href="https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&display=swap" rel="stylesheet">
     <script>
-  (function(d) {
-    var config = {
-      kitId: 'gpu6rtb',
-      scriptTimeout: 3000,
-      async: true
-    },
-    h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
-  })(document);
-</script>
- 
+    (function(d) {
+        var config = {
+            kitId: 'gpu6rtb',
+            scriptTimeout: 3000,
+            async: true
+        },
+        h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+    })(document);
+    </script>
+
     <style>
-body {
-    margin: 0;
-    /* ここを書き換え！ "hot-gekai11kk" を先頭に追加します */
-    font-family: "hot-gekai11kk", "Sawarabi Mincho", serif;
-    /* 背景画像を指定する（ファイル名を自分のものに書き換えてください） */
-    background-image: url('BG.png'); 
-    
-    /* 画像を画面いっぱいに広げ、スクロールしても動かないように固定する */
-    background-size: cover;
-    background-attachment: fixed;
-    background-position: center;
+        body {
+            margin: 0;
+            font-family: "hot-gekai11kk", "Sawarabi Mincho", serif;
+            background-image: url('BG.png'); 
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container, .maigo-fuda {
+            background-color: rgba(255, 255, 255, 0.6) !important; 
+            border-radius: 15px;
+        }
 
-    /* 中央寄せにするための設定 */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-}
-.container, .maigo-fuda {
-    /* 白 (255, 255, 255) で、不透明度を 0.8 (80%) に設定 */
-    background-color: rgba(255, 255, 255, 0.6) !important; 
-    
-    /* 角を少し丸くすると、より今風になります */
-    border-radius: 15px;
-}
+        h2, h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-/* 2. 「お店候補」などの見出しを中央に */
-h2, h3 {
-    text-align: center;
-    margin-bottom: 20px;
-}
+        .order-hint {
+            font-family: "ab-ootori", sans-serif;
+            font-size: 28px;
+            font-weight: 400;
+            margin: 20px 0;
+            text-align: center;
+        }
 
-/* 3. 引き直すボタンを中央に */
-.retry-btn {
-    display: block;        /* block要素にすることでmargin: autoが効くようになる */
-    margin: 30px auto;     /* 上下に30px、左右を中央揃え */
-    width: 200px;
-}
-/* 「一杯目に何を頼む？」を筆文字（AB鳳）にする */
-.order-hint {
-    font-family: "ab-ootori", sans-serif; /* Adobe Fontsで指定された名前 */
-    font-size: 28px;                     /* 文字の大きさ */
-    font-weight: 400;                    /* Adobe指定の太さ */
-    margin: 20px 0;
-    text-align: center;
-}
-.mission-unit { margin-bottom: 30px; }
-.mission-btns { display: flex; justify-content: space-around; gap: 10px; }
+        /* ミッション画面専用の調整 */
+        #mission-screen .order-hint {
+            font-size: 20px; /* 改行防止のため小さく設定 */
+            margin: 15px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-/* 達成・失敗ボタンの基本 */
-.m-btn {
-    padding: 10px 30px;
-    border-radius: 8px;
-    font-family: "ab-ootori", sans-serif; /* 筆文字を適用 */
-    font-size: 20px;
-    color: white;
-    border: none;
-}
-.fail { background-color: #6d1a1a; } /* 渋い赤 */
-.success { background-color: #3b6b9e; } /* 渋い青 */
+        .mission-unit { margin-bottom: 30px; }
+        .mission-btns { display: flex; justify-content: space-around; gap: 10px; }
 
-/* 下部の大きなボタン */
-.footer-btns { display: flex; justify-content: space-between; margin-top: 40px; }
-.exit-btn { background-color: #b22222; padding: 10px 20px; color: white; border-radius: 5px; font-family: "ab-ootori", sans-serif;}
-.next-btn { background-color: #4682b4; padding: 10px 20px; color: white; border-radius: 5px; font-family: "ab-ootori", sans-serif;}
+        /* 画像ボタンのスタイル */
+        .m-img-btn {
+            width: 130px; /* 達成・失敗ボタンの横幅 */
+            height: auto;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .m-img-btn:active { transform: scale(0.95); }
 
-/* ミッション画面の見出しサイズを調整 */
-#mission-screen .order-hint {
-    font-size: 20px;       /* 28pxから20pxに下げて改行を防ぐ */
-    margin: 15px 0;
-    white-space: nowrap;   /* 絶対に改行させない設定 */
-    overflow: hidden;
-    text-overflow: ellipsis; /* 万が一長すぎたら「...」にする */
-}
+        .f-img-btn {
+            width: 140px; /* 下部ボタンの横幅 */
+            height: auto;
+            cursor: pointer;
+        }
 
-/* ミッション画面内のカードも少しスリムに */
-#selected-shop-card .shop-card {
-    margin-bottom: 20px;
-}
+        .footer-btns { 
+            display: flex; 
+            justify-content: space-around; 
+            margin-top: 30px; 
+            width: 100%;
+        }
 
+        /* 以下、既存のレイアウト維持用CSS */
+        header { width: 100%; padding: 30px 0 10px; display: flex; justify-content: center; align-items: center; }
+        .container, .maigo-fuda { width: 92%; max-width: 400px; margin: 20px auto; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .section-title { text-align: center; margin-top: 0; font-size: 1.2rem; }
+        .shop-card { display: flex; align-items: center; background: #fff; border: 1px solid #1a237e; margin-bottom: 12px; padding: 10px; text-align: left; }
     </style>
 </head>
-<div id="mission-screen" class="container" style="display: none; background-color: rgba(255, 255, 255, 0.6) !important;">
+<body>
+
+<div id="mission-screen" class="container" style="display: none;">
     <h2 class="section-title">お店</h2>
-    <div id="selected-shop-card"></div> <div class="mission-unit">
+    <div id="selected-shop-card"></div> 
+    
+    <div class="mission-unit">
         <h3 class="order-hint" id="mission-text-1">一杯目にトマトハイを頼め</h3>
         <div class="mission-btns">
-            <button class="m-btn fail">失敗</button>
-            <button class="m-btn success">達成</button>
+            <img src="fail.png" class="m-img-btn" onclick="this.style.opacity='0.5'" alt="失敗">
+            <img src="achievement.png" class="m-img-btn" onclick="this.style.opacity='0.5'" alt="達成">
         </div>
     </div>
 
     <div class="mission-unit">
         <h3 class="order-hint" id="mission-text-2">店主のおすすめを聞け</h3>
         <div class="mission-btns">
-            <button class="m-btn fail">失敗</button>
-            <button class="m-btn success">達成</button>
+            <img src="fail.png" class="m-img-btn" onclick="this.style.opacity='0.5'" alt="失敗">
+            <img src="achievement.png" class="m-img-btn" onclick="this.style.opacity='0.5'" alt="達成">
         </div>
     </div>
 
     <div class="footer-btns">
-        <button class="exit-btn">店を出る</button>
-        <button class="next-btn">次の迷子札</button>
+        <img src="exit.png" class="f-img-btn" onclick="location.reload()" alt="店を出る">
+        <img src="next.png" class="f-img-btn" onclick="getNextMission()" alt="次の迷子札">
     </div>
 </div>
 
-  <header>
+<header>
     <div class="logo-area">
         <img src="logo.png" alt="呑み迷子" style="width: 150px; height: auto;">
     </div>
@@ -143,106 +136,14 @@ h2, h3 {
     <img id="action-button" src="search.png" onclick="startGacha()" style="cursor: pointer; width: 300px; max-width: 80%;">
 </div>
 
-<style>
-/* --- CSS: 中央揃えとレイアウトの調整 --- */
-
-header {
-    width: 100%;
-    padding: 30px 0 10px; /* 上に余裕を持たせる */
-    display: flex;
-    justify-content: center; /* 左右中央 */
-    align-items: center;
-}
-
-.logo-area {
-    text-align: center;
-}
-
-.logo-text {
-    margin: 0;
-    font-size: 2.5rem; /* ロゴの大きさ */
-    letter-spacing: 2px;
-}
-
-.logo-sub {
-    font-size: 0.7rem;
-    letter-spacing: 5px;
-    margin-top: -5px;
-}
-
-/* 各セクションを中央寄せ */
-.container, .maigo-fuda {
-    width: 92%;
-    max-width: 400px;
-    margin: 20px auto; /* 左右autoで中央 */
-    background: #fff;
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    box-sizing: border-box;
-}
-
-.section-title {
-    text-align: center;
-    margin-top: 0;
-    font-size: 1.2rem;
-}
-
-/* ボタンを中央に配置 */
-.retry-btn {
-    display: block;
-    margin: 30px auto 60px; /* 左右autoで中央 */
-    background-color: #a52a2a;
-    color: white;
-    border: none;
-    padding: 15px 50px;
-    font-size: 1.4rem;
-    border-radius: 10px;
-    cursor: pointer;
-}
-/* カードを横並びにする設定 */
-.shop-card {
-    display: flex;                /* 横並びにする */
-    align-items: center;          /* 垂直中央 */
-    background: #fff;
-    border: 1px solid #1a237e;    /* 紺色の細い枠線 */
-    margin-bottom: 12px;
-    padding: 10px;
-    text-align: left;             /* 文字は左寄せ */
-}
-
-.shop-img {
-    width: 80px;                  /* 写真のサイズを固定 */
-    height: 80px;
-    object-fit: cover;
-    margin-right: 15px;           /* 写真と文字の間の隙間 */
-}
-
-.shop-name {
-    margin: 0 0 5px 0;
-    font-size: 1.1rem;
-    color: #1a237e;               /* 店名も紺色にすると締まります */
-}
-
-.shop-details {
-    margin: 0;
-    font-size: 0.8rem;
-    color: #333;
-    font-family: 'Sawarabi Mincho', serif; /* 詳細は読みやすい明朝体で */
-}
-</style>
 <script>
-// ボタンが押せるようになったか確認するためのログ
-console.log("プログラムを読み込みました");
-
-// 1. お店を表示する関数
 // 1. お店を表示する関数
 function displayShops(data, currentRange) {
     const shopList = document.getElementById('shop-list');
     const hint = document.getElementById('drink-hint');
     const drinks = ["生ビール", "ハイボール", "レモンサワー", "日本酒", "焼酎", "ウーロン茶", "カシオレ", "トマトハイ"];
 
-    if(hint) hint.innerText = "一杯目は " + drinks[Math.floor(Math.random() * drinks.length)] + "";
+    if(hint) hint.innerText = "一杯目は " + drinks[Math.floor(Math.random() * drinks.length)];
 
     if(!shopList) return;
     shopList.innerHTML = "";
@@ -272,27 +173,23 @@ function displayShops(data, currentRange) {
             </div>
         `;
 
-        // タップした時の画面切り替え
-       // タップした時の画面切り替え
-        // タップした時の画面切り替え
         shopCard.onclick = () => {
-            // 1. 全てのメイン要素を確実に隠す（.containerを全て隠すことでお店候補も消えます）
+            // 1. メイン要素をすべて隠す（お店候補を含むすべての .container を隠す）
             const selectors = ['header', '.container', '.maigo-fuda', '#button-container'];
             selectors.forEach(sel => {
                 const elements = document.querySelectorAll(sel);
                 elements.forEach(el => el.style.display = 'none');
             });
 
-            // 2. 迷子札（一杯目）のテキストをミッション画面にコピー（「！」を除去）
+            // 2. 迷子札の連動（！を除去して「を頼め」に繋げる）
             const currentDrink = document.getElementById('drink-hint').innerText;
             const missionDrink = document.getElementById('mission-text-1');
             if(missionDrink) {
-                // 「！」を消して、「一杯目は」を「一杯目に」に置換
-                let cleanText = currentDrink.replace("！", "").replace("一杯目は", "一杯目に");
+                let cleanText = currentDrink.replace("一杯目は", "一杯目に");
                 missionDrink.innerText = cleanText + "を頼め";
             }
 
-            // 3. ミッション画面を表示
+            // 3. ミッション画面を表示し、選択したお店情報をコピー
             const missionScreen = document.getElementById('mission-screen');
             if(missionScreen) {
                 missionScreen.style.display = 'block';
@@ -308,14 +205,38 @@ function displayShops(data, currentRange) {
     });
 }
 
-// 2. データを取りに行く関数
+// 2. 次の迷子札（ランダムなお題）
+function getNextMission() {
+    const tasks = [
+        "店主のおすすめを聞け",
+        "隣の人と乾杯せよ",
+        "本日のおすすめを注文せよ",
+        "一番人気のつまみを頼め",
+        "店員さんの名前を覚えろ",
+        "揚げ物を1品頼め",
+        "自分以外が頼んだ酒を頼め",
+        "一気飲みを阻止せよ"
+    ];
+    const taskEl = document.getElementById('mission-text-2');
+    if(taskEl) {
+        const randomTask = tasks[Math.floor(Math.random() * tasks.length)];
+        taskEl.innerText = randomTask;
+        
+        // ボタンの押し跡（半透明）を元に戻す
+        const missionUnit = taskEl.closest('.mission-unit');
+        const btns = missionUnit.querySelectorAll('.m-img-btn');
+        btns.forEach(btn => btn.style.opacity = "1");
+    }
+}
+
+// データ取得と位置情報の関数（NetlifyファンクションURLを修正）
 async function fetchAndDisplay(lat, lng, rangeIndex = 2) {
     const shopList = document.getElementById('shop-list');
     const rangeLabels = {2: "500m", 3: "1000m", 5: "3000m"};
     if(shopList) shopList.innerHTML = `<p style="text-align:center;">${rangeLabels[rangeIndex]}圏内を探索中...</p>`;
 
     try {
-        const response = await fetch(`/getShops?lat=${lat}&lng=${lng}&range=${rangeIndex}`);
+        const response = await fetch(`/.netlify/functions/getShops?lat=${lat}&lng=${lng}&range=${rangeIndex}`);
         const data = await response.json();
 
         if ((!data.results || !data.results.shop || data.results.shop.length === 0) && rangeIndex < 5) {
@@ -325,11 +246,9 @@ async function fetchAndDisplay(lat, lng, rangeIndex = 2) {
         displayShops(data, rangeLabels[rangeIndex]);
     } catch (e) {
         if(shopList) shopList.innerHTML = '<p style="text-align:center;">エラーが発生しました。</p>';
-        console.error(e);
     }
 }
 
-// 3. ガチャ開始ボタン
 function startGacha() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -338,8 +257,8 @@ function startGacha() {
             },
             () => { alert("位置情報が許可されていません"); }
         );
-    } else {
-        alert("お使いのブラウザは位置情報に対応していません");
     }
 }
 </script>
+</body>
+</html>
