@@ -99,10 +99,12 @@
 
 <div id="mission-screen" class="container" style="display: none;">
     <h2 class="section-title">お店</h2>
-    <div id="selected-shop-card"></div> 
+    <div id="selected-shop-card"></div>
     
-    <div id="dynamic-mission-container"></div>
+    <div id="drink-hint-in-mission" class="order-hint"></div>
 
+    <div id="dynamic-mission-container"></div>
+    
     <div class="footer-btns">
         <img src="exit.png" class="f-img-btn" onclick="location.reload()" alt="店を出る">
         <img src="next.png" class="f-img-btn" onclick="getNextMission()" alt="次の迷子札">
@@ -173,7 +175,7 @@ function displayShops(data, currentRange) {
 
         shopCard.onclick = () => {
             // メイン要素を隠す
-            const selectors = ['header', '.container', '.maigo-fuda', '#button-container'];
+            const selectors = ['header', '.container',  '#button-container'];
             selectors.forEach(sel => {
                 const elements = document.querySelectorAll(sel);
                 elements.forEach(el => el.style.display = 'none');
