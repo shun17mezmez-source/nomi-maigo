@@ -94,13 +94,7 @@
     <h2 class="section-title">お店</h2>
     <div id="selected-shop-card"></div> 
     
-    <div class="mission-unit">
-        <h3 class="order-hint" id="mission-text-1">一杯目にトマトハイを頼め</h3>
-        <div class="mission-btns">
-            <img src="fail.png" class="m-img-btn" onclick="this.style.opacity='0.5'" alt="失敗">
-            <img src="achievement.png" class="m-img-btn" onclick="this.style.opacity='0.5'" alt="達成">
-        </div>
-    </div>
+ <div id="dynamic-mission-container"></div>
 
     <div id="dynamic-mission-container"></div>
 
@@ -208,8 +202,7 @@ function getNextMission() {
     const container = document.getElementById('dynamic-mission-container');
     if (!container) return;
 
-    // 前に出した追加指令を消して入れ替える
-    container.innerHTML = ""; 
+    // ★重要：container.innerHTML = ""; は書きません（消さないため）
 
     const tasks = [
         "店主のおすすめを聞け",
@@ -223,12 +216,11 @@ function getNextMission() {
     ];
     const randomTask = tasks[Math.floor(Math.random() * tasks.length)];
 
-    // HTML要素をその場で生成
+    // 新しいミッションを生成
     const newMission = document.createElement('div');
     newMission.className = 'mission-unit';
-    newMission.style.marginTop = "20px";
-    newMission.style.borderTop = "1px dashed #ccc";
-    newMission.style.paddingTop = "20px";
+    // 前の指令との間に点線を入れて見やすくします
+    newMission.style.cssText = "margin-top:20px; border-top:1px dashed #ccc; padding-top:20px;";
 
     newMission.innerHTML = `
         <h3 class="order-hint">${randomTask}</h3>
@@ -238,10 +230,10 @@ function getNextMission() {
         </div>
     `;
 
-    // 画面にガッチャンコ
+    // 既存のリストの「一番下」に追加する
     container.appendChild(newMission);
 
-    // 新しい指令が見えるようにスムーズにスクロール
+    // 追加された指令までスムーズにスクロール
     window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 }
 
