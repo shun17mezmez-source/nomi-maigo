@@ -86,6 +86,10 @@
         .container, .maigo-fuda { width: 92%; max-width: 400px; margin: 20px auto; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); box-sizing: border-box; }
         .section-title { text-align: center; margin-top: 0; font-size: 1.2rem; }
         .shop-card { display: flex; align-items: center; background: #fff; border: 1px solid #1a237e; margin-bottom: 12px; padding: 10px; text-align: left; }
+        /* お店情報専用のフォント設定 */
+.shop-desc {
+    font-family: sans-serif !important;
+}
     </style>
 </head>
 
@@ -157,13 +161,14 @@ function displayShops(data, currentRange) {
         shopCard.className = 'shop-card';
         shopCard.style = "display:flex; align-items:center; background:#fff; border:1px solid #1a237e; margin-bottom:10px; padding:10px; cursor:pointer; border-radius:10px; text-align:left;";
 
-        shopCard.innerHTML = `
-            <img src="${shop.photo.pc.l}" style="width:80px; height:80px; object-fit:cover; margin-right:15px; border-radius:5px;">
-            <div style="flex:1;">
-                <h3 style="margin:0; font-size:1rem; color:#000; font-family:sans-serif;">${shop.name}</h3>
-                <p style="margin:5px 0 0; font-size:0.75rem; color:#444;">${shop.genre.name}<br>${shop.access}</p>
-            </div>
-        `;
+     // 164行目から169行目あたりを以下のように書き換え
+shopCard.innerHTML = `
+    <img src="${shop.photo.pc.l}" style="width:80px; height:80px; object-fit:cover; margin-right:15px; border-radius:10px;">
+    <div style="flex:1;">
+        <div style="font-weight:bold; margin-bottom:5px;">${shop.name}</div>
+        <div class="shop-desc">${shop.genre.name}<br>${shop.access}</div>
+    </div>
+`;
 
         shopCard.onclick = () => {
             // メイン要素を隠す
