@@ -101,7 +101,10 @@
     <h2 class="section-title">お店</h2>
     <div id="selected-shop-card"></div>
     
-    <div id="drink-hint-in-mission" class="order-hint"></div>
+    <div class="maigo-fuda" style="margin: 20px 0;">
+        <h3 class="section-title">迷子札</h3>
+        <div id="mission-drink-hint" class="order-hint"></div>
+    </div>
 
     <div id="dynamic-mission-container"></div>
     
@@ -182,25 +185,16 @@ function displayShops(data, currentRange) {
             });
 
             // 迷子札の連動
-            const currentDrink = document.getElementById('drink-hint').innerText;
-            const missionDrink = document.getElementById('mission-text-1');
-            if(missionDrink) {
-                let cleanText = currentDrink.replace("一杯目は", "一杯目に");
-                missionDrink.innerText = cleanText + "を頼め";
-            }
-
-            // ミッション画面を表示
-            const missionScreen = document.getElementById('mission-screen');
-            if(missionScreen) {
-                missionScreen.style.display = 'block';
-                const selectedPlace = document.getElementById('selected-shop-card');
-                if(selectedPlace) {
-                    selectedPlace.innerHTML = shopCard.innerHTML;
-                    selectedPlace.style.cssText = shopCard.style.cssText;
-                    selectedPlace.style.cursor = "default";
-                }
-            }
-        };
+           const currentDrink = document.getElementById('drink-hint').innerText;
+    const missionDrinkHint = document.getElementById('mission-drink-hint');
+    if (missionDrinkHint) {
+        // "一杯目は" を "一杯目に" に変換して表示
+        missionDrinkHint.innerText = currentDrink.replace("一杯目は", "一杯目に") + "を頼め";
+    }
+// 画面表示
+    document.getElementById('mission-screen').style.display = 'block';
+    // ...（以下略）
+};
         shopList.appendChild(shopCard);
     });
 }
