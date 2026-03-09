@@ -56,7 +56,7 @@
             text-overflow: ellipsis;
         }
 
-        .mission-unit { margin-bottom: 30px; }
+        .mission-unit { margin-bottom: 10px; }
         .mission-btns { display: flex; justify-content: space-around; gap: 10px; }
 
         /* 画像ボタンのスタイル */
@@ -235,7 +235,7 @@ function getNextMission() {
 
     const newMission = document.createElement('div');
     newMission.className = 'mission-unit';
-    newMission.style.cssText = "margin-top:20px; border-top:1px dashed #ccc; padding-top:20px;";
+    newMission.style.cssText = "margin-top:10px; border-top:1px dashed #ccc; padding-top:10px;";
 
     newMission.innerHTML = `
         <h3 class="order-hint">${randomTask}</h3>
