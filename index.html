@@ -89,7 +89,7 @@
 
 /* 選択されたボタン（大きく表示） */
 .m-img-btn.selected {
-    transform: scale(1.1); /* 1.1倍に拡大 */
+    transform: scale(1.2); /* 1.1倍に拡大 */
     opacity: 1;
 }
 
@@ -241,6 +241,7 @@ function getNextMission() {
     const container = document.getElementById('dynamic-mission-container');
     if (!container) return;
 
+    // ミッションリスト（ここを消さないのがポイントです！）
     const tasks = [
         "店主のおすすめを聞け",
         "隣の人と乾杯せよ",
@@ -252,18 +253,21 @@ function getNextMission() {
         "おすすめの日本酒を聞け"
     ];
     const randomTask = tasks[Math.floor(Math.random() * tasks.length)];
-
+    
+    // ミッションの単位を作成
     const newMission = document.createElement('div');
     newMission.className = 'mission-unit';
     newMission.style.cssText = "margin-top:10px; border-top:1px dashed #ccc; padding-top:10px;";
-
+    
+    // HTMLを組み立てる（onclickに関数を指定）
     newMission.innerHTML = `
         <h3 class="order-hint">${randomTask}</h3>
         <div class="mission-btns">
-            <img src="fail.png" class="m-img-btn" onclick="this.style.opacity='0.5'" alt="失敗">
-            <img src="achievement.png" class="m-img-btn" onclick="this.style.opacity='0.5'" alt="達成">
+            <img src="fail.png" class="m-img-btn" onclick="selectResult(this, false)" alt="失敗">
+            <img src="achievement.png" class="m-img-btn" onclick="selectResult(this, true)" alt="達成">
         </div>
     `;
+    
     container.appendChild(newMission);
     window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 }
@@ -297,14 +301,14 @@ function startGacha() {
 }
 
 function selectResult(button, isSuccess) {
-    // ボタンの親要素（mission-btns）を取得
-    const parent = button.parentElement;
+    // 確実に親のmission-btnsを探す
+    const parent = button.closest('.mission-btns');
+    if (!parent) return; 
+    
     const buttons = parent.querySelectorAll('.m-img-btn');
     
-    // 一旦クラスをすべてリセット
     buttons.forEach(btn => btn.classList.remove('selected', 'dimmed'));
     
-    // クリックされたボタンには selected、もう片方には dimmed を付与
     button.classList.add('selected');
     buttons.forEach(btn => {
         if (btn !== button) {
