@@ -123,9 +123,9 @@
     <h3 class="section-title">迷子札</h3>
     <div id="mission-drink-hint" class="order-hint"></div>
     <div class="mission-btns">
-        <img src="fail.png" class="m-img-btn" alt="失敗">
-        <img src="achievement.png" class="m-img-btn" alt="達成">
-    </div>
+    <img src="fail.png" class="m-img-btn" onclick="selectResult(this, false)" alt="失敗">
+    <img src="achievement.png" class="m-img-btn" onclick="selectResult(this, true)" alt="達成">
+</div>
 </div>
 
     <div id="dynamic-mission-container"></div>
@@ -156,10 +156,6 @@
     <img id="action-button" src="search.png" onclick="startGacha()" style="cursor: pointer; width: 300px; max-width: 80%;">
 </div>
 
-<div class="mission-btns">
-    <img src="fail.png" class="m-img-btn" onclick="selectResult(this, false)" alt="失敗">
-    <img src="achievement.png" class="m-img-btn" onclick="selectResult(this, true)" alt="達成">
-</div>
 
 <script>
 // 1. お店を表示する関数
