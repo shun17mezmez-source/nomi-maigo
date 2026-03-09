@@ -99,16 +99,16 @@
 
 <div id="mission-screen" class="container" style="display: none;">
     <h2 class="section-title">お店</h2>
+    
     <div id="selected-shop-card"></div>
     
-    <div id="mission-drink-hint" class="order-hint"></div>
+    <div class="maigo-fuda" style="margin-top: 20px;">
+        <h3 class="section-title">迷子札</h3>
+        <div id="mission-drink-hint" class="order-hint"></div>
+    </div>
 
     <div id="dynamic-mission-container"></div>
-    
-    <div class="footer-btns">
-        <img src="exit.png" class="f-img-btn" onclick="location.reload()" alt="店を出る">
-        <img src="next.png" class="f-img-btn" onclick="getNextMission()" alt="次の迷子札">
-    </div>
+    ...
 </div>
 
 <header>
@@ -173,32 +173,29 @@ function displayShops(data, currentRange) {
     </div>
 `;
 
-        shopCard.onclick = () => {
-            // メイン要素を隠す
-            const selectors = ['header', '.container',  '#button-container'];
-            selectors.forEach(sel => {
-                const elements = document.querySelectorAll(sel);
-                elements.forEach(el => el.style.display = 'none');
-            });
-
-            // 迷子札の連動
-           // お店カードをミッション画面にセット
-const selectedPlace = document.getElementById('selected-shop-card');
-if (selectedPlace) {
-    // 重要な変更：shopCard の中身を丸ごとコピーする
-    selectedPlace.innerHTML = shopCard.outerHTML; 
-    
-    // onclickが効いたままだと邪魔なので、必要なら無効化する
-    const card = selectedPlace.querySelector('.shop-card');
-    if (card) card.onclick = null;
-}
-// 画面表示
-    document.getElementById('mission-screen').style.display = 'block';
-    // ...（以下略）
-};
-        shopList.appendChild(shopCard);
+       shopCard.onclick = () => {
+    // 1. メイン画面の要素をすべて隠す（迷子札も含めて隠すのが正解です）
+    const selectors = ['header', '.container', '.maigo-fuda', '#button-container'];
+    selectors.forEach(sel => {
+        document.querySelectorAll(sel).forEach(el => el.style.display = 'none');
     });
-}
+
+    // 2. 「一杯目」の指令をコピーして、ミッション画面専用の場所にセット
+    const currentDrink = document.getElementById('drink-hint').innerText;
+    const missionDrinkHint = document.getElementById('mission-drink-hint');
+    if (missionDrinkHint) {
+        missionDrinkHint.innerText = currentDrink.replace("一杯目は", "一杯目に") + "を頼め";
+    }
+
+    // 3. 【重要】選択した店のカードをミッション画面に表示させる
+    const selectedPlace = document.getElementById('selected-shop-card');
+    if (selectedPlace) {
+        selectedPlace.innerHTML = shopCard.innerHTML; // お店の情報をコピー
+    }
+
+    // 4. ミッション画面を表示
+    document.getElementById('mission-screen').style.display = 'block';
+};
 
 function getNextMission() {
     const container = document.getElementById('dynamic-mission-container');
