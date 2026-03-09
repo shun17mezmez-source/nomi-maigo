@@ -181,7 +181,7 @@ function displayShops(data, currentRange) {
         shopCard.onclick = () => {
             // 1. メイン画面の「店リスト」や「元の迷子札」だけを隠す
             // selectors から '.container' を削除し、隠したいIDを直接指定します
-            const selectors = ['header', '#shop-list', '.maigo-fuda', '#button-container'];
+            const selectors = ['header', '.container', '#shop-list', '.maigo-fuda', '#button-container'];
             selectors.forEach(sel => {
                 document.querySelectorAll(sel).forEach(el => {
                     // ミッション画面内の要素（.maigo-fudaなど）は隠さないように判定
