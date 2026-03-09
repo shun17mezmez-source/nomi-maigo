@@ -99,16 +99,19 @@
 
 <div id="mission-screen" class="container" style="display: none;">
     <h2 class="section-title">お店</h2>
-    
     <div id="selected-shop-card"></div>
-    
+
     <div class="maigo-fuda" style="margin-top: 20px;">
         <h3 class="section-title">迷子札</h3>
         <div id="mission-drink-hint" class="order-hint"></div>
     </div>
 
     <div id="dynamic-mission-container"></div>
-    ...
+
+    <div class="footer-btns" style="display: flex; justify-content: space-around; margin-top: 30px;">
+        <img src="exit.png" class="f-img-btn" onclick="location.reload()" alt="店を出る" style="width: 140px; cursor: pointer;">
+        <img src="next.png" class="f-img-btn" onclick="getNextMission()" alt="次の迷子札" style="width: 140px; cursor: pointer;">
+    </div>
 </div>
 
 <header>
@@ -174,23 +177,34 @@ function displayShops(data, currentRange) {
             </div>
         `;
 
-        // お店をクリックした時の処理
+       // お店をクリックした時の処理
         shopCard.onclick = () => {
-            const selectors = ['header', '.container', '.maigo-fuda', '#button-container'];
+            // 1. メイン画面の「店リスト」や「元の迷子札」だけを隠す
+            // selectors から '.container' を削除し、隠したいIDを直接指定します
+            const selectors = ['header', '#shop-list', '.maigo-fuda', '#button-container'];
             selectors.forEach(sel => {
-                document.querySelectorAll(sel).forEach(el => el.style.display = 'none');
+                document.querySelectorAll(sel).forEach(el => {
+                    // ミッション画面内の要素（.maigo-fudaなど）は隠さないように判定
+                    if (!document.getElementById('mission-screen').contains(el)) {
+                        el.style.display = 'none';
+                    }
+                });
             });
 
+            // 2. 指令のコピー
+            const hint = document.getElementById('drink-hint');
             const missionDrinkHint = document.getElementById('mission-drink-hint');
             if (hint && missionDrinkHint) {
                 missionDrinkHint.innerText = hint.innerText.replace("一杯目は", "一杯目に") + " を頼め";
             }
 
+            // 3. 店情報をセット
             const selectedPlace = document.getElementById('selected-shop-card');
             if (selectedPlace) {
                 selectedPlace.innerHTML = shopCard.innerHTML;
             }
 
+            // 4. ミッション画面全体を表示
             const missionScreen = document.getElementById('mission-screen');
             if (missionScreen) {
                 missionScreen.style.display = 'block';
