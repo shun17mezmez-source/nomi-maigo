@@ -200,9 +200,10 @@ function displayShops(data, currentRange) {
             </div>
         `;
 
-      // お店カードをクリックした時の処理
+       // お店をクリックした時の処理
+       // お店をクリックした時の処理
 shopCard.onclick = () => {
-    // 全体を setTimeout で囲む
+    // 0.5秒の遅延を設定して、その後に中の処理をすべて実行する
     setTimeout(() => {
         // 1. メイン画面の要素をすべて隠す
         const selectors = ['header', '.container', '.maigo-fuda', '#button-container'];
@@ -214,10 +215,10 @@ shopCard.onclick = () => {
             });
         });
 
-        // 2. 選択したカードをミッション画面に移動させる
+        // 2. 選択したカードのDOMノード自体をミッション画面に移動させる
         const selectedPlace = document.getElementById('selected-shop-card');
         if (selectedPlace) {
-            selectedPlace.innerHTML = '';
+            selectedPlace.innerHTML = ''; // 一旦空にする
             selectedPlace.appendChild(shopCard.cloneNode(true));
             // 移動した先でクリックを無効化
             selectedPlace.querySelector('.shop-card').onclick = null;
@@ -232,12 +233,8 @@ shopCard.onclick = () => {
 
         // 4. ミッション画面を表示
         document.getElementById('mission-screen').style.display = 'block';
-        window.scrollTo(0, 0);
-    }, 500); // ここで 0.5秒の遅延を設定
+    }, 500); // 500ミリ秒 = 0.5秒の遅延
 };
-
-// リストに追加
-shopList.appendChild(shopCard);
 
 // 2. 次のミッションを追加する関数
 function getNextMission() {
