@@ -138,9 +138,10 @@ function displayShops(data, currentRange) {
     const hint = document.getElementById('drink-hint');
     const drinks = ["生ビール", "ハイボール", "レモンサワー", "日本酒", "焼酎", "ウーロン茶", "カシオレ", "トマトハイ"];
 
-    // 迷子札の内容をランダムに決定
+    // 1. 迷子札の内容を決定（表記を統一します）
     if(hint) {
-        hint.innerText = "一杯目は " + drinks[Math.floor(Math.random() * drinks.length)];
+        const randomDrink = drinks[Math.floor(Math.random() * drinks.length)];
+        hint.innerText = "一杯目は " + randomDrink; // スペースの有無を固定
     }
 
     if(!shopList) return;
@@ -157,12 +158,13 @@ function displayShops(data, currentRange) {
     rangeText.innerText = `(${currentRange}以内の結果)`;
     shopList.appendChild(rangeText);
 
- // 3件ランダムに抽出 (163行目付近から)
+    // 3件ランダムに抽出
     const shops = data.results.shop.sort(() => 0.5 - Math.random()).slice(0, 3);
 
     shops.forEach(shop => {
         const shopCard = document.createElement('div');
         shopCard.className = 'shop-card';
+        // スタイル適用（枠線や余白）
         shopCard.style = "display:flex; align-items:center; background:#fff; border:1px solid #1a237e; margin-bottom:10px; padding:10px; cursor:pointer; border-radius:10px;";
 
         shopCard.innerHTML = `
@@ -173,34 +175,38 @@ function displayShops(data, currentRange) {
             </div>
         `;
 
+        // お店をクリックした時の処理
         shopCard.onclick = () => {
-            // 1. メイン画面の要素をすべて隠す
+            // A. メイン画面の要素をすべて隠す
             const selectors = ['header', '.container', '.maigo-fuda', '#button-container'];
             selectors.forEach(sel => {
                 document.querySelectorAll(sel).forEach(el => el.style.display = 'none');
             });
 
-            // 2. 「一杯目」の指令をコピー
-            const drinkHintEl = document.getElementById('drink-hint');
+            // B. 指令のコピー（"一杯目は" を "一杯目に" に置換）
             const missionDrinkHint = document.getElementById('mission-drink-hint');
-            if (drinkHintEl && missionDrinkHint) {
-                const currentDrink = drinkHintEl.innerText;
-                missionDrinkHint.innerText = currentDrink.replace("一杯目は", "一杯目に") + "を頼め";
+            if (hint && missionDrinkHint) {
+                const currentText = hint.innerText;
+                // replaceが確実に動くように調整
+                missionDrinkHint.innerText = currentText.replace("一杯目は", "一杯目に") + " を頼め";
             }
 
-            // 3. 選択した店のカードをミッション画面に表示
+            // C. 店情報をミッション画面の専用枠にセット
             const selectedPlace = document.getElementById('selected-shop-card');
             if (selectedPlace) {
                 selectedPlace.innerHTML = shopCard.innerHTML;
             }
 
-            // 4. ミッション画面を表示
-            document.getElementById('mission-screen').style.display = 'block';
+            // D. ミッション画面を表示
+            const missionScreen = document.getElementById('mission-screen');
+            if (missionScreen) {
+                missionScreen.style.display = 'block';
+            }
         };
 
         shopList.appendChild(shopCard);
-    }); // ここで forEach が終わる
-} // ここで displayShops 関数が終わる
+    });
+}
     // ★重要：container.innerHTML = ""; は書きません（消さないため）
 
     const tasks = [
