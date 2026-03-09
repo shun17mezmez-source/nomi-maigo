@@ -158,49 +158,51 @@ function displayShops(data, currentRange) {
     shopList.appendChild(rangeText);
 
     // 3件ランダムに抽出
+  // 3件ランダムに抽出
     const shops = data.results.shop.sort(() => 0.5 - Math.random()).slice(0, 3);
-    
+
     shops.forEach(shop => {
         const shopCard = document.createElement('div');
         shopCard.className = 'shop-card';
-        shopCard.style = "display:flex; align-items:center; background:#fff; border:1px solid #1a237e; margin-bottom:10px; padding:10px; cursor:pointer; border-radius:10px; text-align:left;";
+        shopCard.style = "display:flex; align-items:center; background:#fff; border:1px solid #1a237e; margin-bottom:10px; padding:10px; cursor:pointer; border-radius:10px;";
 
-    shopCard.innerHTML = `
-    <img src="${shop.photo.pc.l}" style="width:80px; height:80px; object-fit:cover; margin-right:15px; border-radius:10px;">
-    <div style="flex:1;">
-        <div class="shop-desc" style="font-weight:bold; margin-bottom:5px;">${shop.name}</div>
-        <div class="shop-desc">${shop.genre.name}<br>${shop.access}</div>
-    </div>
-`;
+        // お店カードの中身を作成
+        shopCard.innerHTML = `
+            <img src="${shop.photo.pc.l}" style="width:80px; height:80px; object-fit:cover; margin-right:15px; border-radius:10px;">
+            <div style="flex:1;">
+                <div class="shop-desc" style="font-weight:bold; margin-bottom:5px;">${shop.name}</div>
+                <div class="shop-desc">${shop.genre.name}<br>${shop.access}</div>
+            </div>
+        `;
 
-       shopCard.onclick = () => {
-    // 1. メイン画面の要素をすべて隠す（迷子札も含めて隠すのが正解です）
-    const selectors = ['header', '.container', '.maigo-fuda', '#button-container'];
-    selectors.forEach(sel => {
-        document.querySelectorAll(sel).forEach(el => el.style.display = 'none');
+        // お店をクリックした時の処理
+        shopCard.onclick = () => {
+            // 1. メイン画面の要素をすべて隠す
+            const selectors = ['header', '.container', '.maigo-fuda', '#button-container'];
+            selectors.forEach(sel => {
+                document.querySelectorAll(sel).forEach(el => el.style.display = 'none');
+            });
+
+            // 2. 「一杯目」の指令をコピー
+            const currentDrink = document.getElementById('drink-hint').innerText;
+            const missionDrinkHint = document.getElementById('mission-drink-hint');
+            if (missionDrinkHint) {
+                missionDrinkHint.innerText = currentDrink.replace("一杯目は", "一杯目に") + "を頼め";
+            }
+
+            // 3. 選択した店のカードをミッション画面に表示
+            const selectedPlace = document.getElementById('selected-shop-card');
+            if (selectedPlace) {
+                selectedPlace.innerHTML = shopCard.innerHTML;
+            }
+
+            // 4. ミッション画面を表示
+            document.getElementById('mission-screen').style.display = 'block';
+        };
+
+        shopList.appendChild(shopCard);
     });
-
-    // 2. 「一杯目」の指令をコピーして、ミッション画面専用の場所にセット
-    const currentDrink = document.getElementById('drink-hint').innerText;
-    const missionDrinkHint = document.getElementById('mission-drink-hint');
-    if (missionDrinkHint) {
-        missionDrinkHint.innerText = currentDrink.replace("一杯目は", "一杯目に") + "を頼め";
-    }
-
-    // 3. 【重要】選択した店のカードをミッション画面に表示させる
-    const selectedPlace = document.getElementById('selected-shop-card');
-    if (selectedPlace) {
-        selectedPlace.innerHTML = shopCard.innerHTML; // お店の情報をコピー
-    }
-
-    // 4. ミッション画面を表示
-    document.getElementById('mission-screen').style.display = 'block';
-};
-
-function getNextMission() {
-    const container = document.getElementById('dynamic-mission-container');
-    if (!container) return;
-
+} // ここで function displayShops が終わります
     // ★重要：container.innerHTML = ""; は書きません（消さないため）
 
     const tasks = [
