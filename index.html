@@ -101,16 +101,19 @@
     <h2 class="section-title">お店</h2>
     <div id="selected-shop-card"></div>
 
-    <div class="maigo-fuda" style="margin-top: 20px;">
-        <h3 class="section-title">迷子札</h3>
-        <div id="mission-drink-hint" class="order-hint"></div>
+    <div id="first-mission-unit" class="mission-unit" style="margin-top:20px; border-top:1px dashed #ccc; padding-top:20px;">
+        <h3 id="mission-drink-hint" class="order-hint"></h3>
+        <div class="mission-btns">
+            <img src="fail.png" class="m-img-btn" onclick="this.style.opacity='0.5'" alt="失敗">
+            <img src="achievement.png" class="m-img-btn" onclick="this.style.opacity='0.5'" alt="達成">
+        </div>
     </div>
 
     <div id="dynamic-mission-container"></div>
 
-    <div class="footer-btns" style="display: flex; justify-content: space-around; margin-top: 30px;">
-        <img src="exit.png" class="f-img-btn" onclick="location.reload()" alt="店を出る" style="width: 140px; cursor: pointer;">
-        <img src="next.png" class="f-img-btn" onclick="getNextMission()" alt="次の迷子札" style="width: 140px; cursor: pointer;">
+    <div class="footer-btns">
+        <img src="exit.png" class="f-img-btn" onclick="location.reload()" alt="店を出る">
+        <img src="next.png" class="f-img-btn" onclick="getNextMission()" alt="次の迷子札">
     </div>
 </div>
 
