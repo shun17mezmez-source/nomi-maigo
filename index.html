@@ -181,38 +181,37 @@ function displayShops(data, currentRange) {
         `;
 
        // お店をクリックした時の処理
-        shopCard.onclick = () => {
-            // 1. メイン画面の「店リスト」や「元の迷子札」だけを隠す
-            // selectors から '.container' を削除し、隠したいIDを直接指定します
-            const selectors = ['header', '.container', '#shop-list', '.maigo-fuda', '#button-container'];
-            selectors.forEach(sel => {
-                document.querySelectorAll(sel).forEach(el => {
-                    // ミッション画面内の要素（.maigo-fudaなど）は隠さないように判定
-                    if (!document.getElementById('mission-screen').contains(el)) {
-                        el.style.display = 'none';
-                    }
-                });
-            });
-
-            // 2. 指令のコピー
-            const hint = document.getElementById('drink-hint');
-            const missionDrinkHint = document.getElementById('mission-drink-hint');
-            if (hint && missionDrinkHint) {
-                missionDrinkHint.innerText = hint.innerText.replace("一杯目は", "一杯目に") + " を頼め";
+       shopCard.onclick = () => {
+    // 1. メイン画面の要素をすべて隠す（ミッション画面以外）
+    const selectors = ['header', '.container', '.maigo-fuda', '#button-container'];
+    selectors.forEach(sel => {
+        document.querySelectorAll(sel).forEach(el => {
+            if (!document.getElementById('mission-screen').contains(el)) {
+                el.style.display = 'none';
             }
+        });
+    });
 
-            // 3. 店情報をセット
-            const selectedPlace = document.getElementById('selected-shop-card');
-            if (selectedPlace) {
-                selectedPlace.innerHTML = shopCard.innerHTML;
-            }
+    // 2. 選択したカードのDOMノード自体をミッション画面に移動させる
+    const selectedPlace = document.getElementById('selected-shop-card');
+    if (selectedPlace) {
+        selectedPlace.innerHTML = ''; // 一旦空にする
+        // ここでクローンを作るか、移動させることでレイアウトを維持
+        selectedPlace.appendChild(shopCard.cloneNode(true));
+        // 移動した先でクリックを無効化（リンク移動などを防ぐ）
+        selectedPlace.querySelector('.shop-card').onclick = null;
+    }
 
-            // 4. ミッション画面全体を表示
-            const missionScreen = document.getElementById('mission-screen');
-            if (missionScreen) {
-                missionScreen.style.display = 'block';
-            }
-        };
+    // 3. 「一杯目」の指令をセット
+    const hint = document.getElementById('drink-hint');
+    const missionDrinkHint = document.getElementById('mission-drink-hint');
+    if (hint && missionDrinkHint) {
+        missionDrinkHint.innerText = hint.innerText.replace("一杯目は", "一杯目に") + " を頼め";
+    }
+
+    // 4. ミッション画面を表示
+    document.getElementById('mission-screen').style.display = 'block';
+};
         shopList.appendChild(shopCard);
     });
 }
