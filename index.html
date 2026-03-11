@@ -110,6 +110,33 @@
     font-size: 0.9rem; /* 必要に応じてサイズ調整してください */
     line-height: 1.4;
 }
+/* フェードアウト用のクラス */
+.fade-out {
+    animation: fadeOut 0.5s ease-out forwards;
+}
+
+/* フェードイン用のクラス */
+.fade-in {
+    animation: fadeIn 0.5s ease-in forwards;
+}
+
+/* フェードアウトのアニメーション */
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+/* フェードインのアニメーション */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; opacity: 1; }
+}
+
+/* ミッション画面の初期状態を非表示にするための調整 */
+#mission-screen {
+    opacity: 0; /* 最初は透明にしておく */
+    transition: opacity 0.5s;
+}
     </style>
 </head>
 
@@ -201,7 +228,51 @@ function displayShops(data, currentRange) {
         `;
 
         // お店をクリックした時の処理
-        shopCard.onclick = () => {
+shopCard.onclick = () => {
+    // 1. 古い画面（ミッション画面以外）をふわっと消す
+    const selectors = ['header', '.container', '.maigo-fuda', '#button-container'];
+    selectors.forEach(sel => {
+        document.querySelectorAll(sel).forEach(el => {
+            if (!document.getElementById('mission-screen').contains(el)) {
+                el.classList.add('fade-out'); // フェードアウトのクラスを追加
+            }
+        });
+    });
+
+    // 2. 0.5秒後に古い画面を完全に非表示にして、ミッション画面をふわっと表示させる
+    setTimeout(() => {
+        // 古い画面を非表示にする（fade-outをつけたままdisplayをnoneにする）
+        selectors.forEach(sel => {
+            document.querySelectorAll(sel).forEach(el => {
+                if (!document.getElementById('mission-screen').contains(el)) {
+                    el.style.display = 'none';
+                }
+            });
+        });
+
+        // ミッション画面のセットアップ
+        const selectedPlace = document.getElementById('selected-shop-card');
+        if (selectedPlace) {
+            selectedPlace.innerHTML = '';
+            selectedPlace.appendChild(shopCard.cloneNode(true));
+            selectedPlace.querySelector('.shop-card').onclick = null;
+        }
+
+        const hint = document.getElementById('drink-hint');
+        const missionDrinkHint = document.getElementById('mission-drink-hint');
+        if (hint && missionDrinkHint) {
+            missionDrinkHint.innerText = hint.innerText.replace("一杯目は", "一杯目に") + " を頼め";
+        }
+
+        // 3. ミッション画面を表示して、フェードインさせる
+        const missionScreen = document.getElementById('mission-screen');
+        missionScreen.style.display = 'block'; // 表示状態にする（CSSでopacity:0に設定済み）
+        missionScreen.classList.add('fade-in'); // フェードインのクラスを追加
+
+        // 画面トップへ移動（アニメーションに合わせてトップへスクロール）
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 500); // 500ミリ秒 = 0.5秒の遅延
+};
             // 0.5秒の遅延を設定
             setTimeout(() => {
                 // 1. メイン画面の要素を隠す
