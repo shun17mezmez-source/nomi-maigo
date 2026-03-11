@@ -157,32 +157,89 @@
 </div>
 
 
-// =========================
-// 1. ミッション結果選択
-// =========================
-function selectResult(button, isSuccess) {
-    const parent = button.closest('.mission-btns');
-    if (!parent) return;
+<script>
+// 1. お店を表示する関数
+function displayShops(data, currentRange) {
+    const shopList = document.getElementById('shop-list');
+    const hint = document.getElementById('drink-hint');
+    const drinks = ["生ビール", "ハイボール", "レモンサワー", "日本酒", "焼酎", "ウーロン茶", "カシオレ", "トマトハイ"];
 
-    const buttons = parent.querySelectorAll('.m-img-btn');
+    // 迷子札の内容を決定
+    if (hint) {
+        const randomDrink = drinks[Math.floor(Math.random() * drinks.length)];
+        hint.innerText = "一杯目は " + randomDrink;
+    }
 
-    buttons.forEach(btn => btn.classList.remove('selected', 'dimmed'));
+    if (!shopList) return;
+    shopList.innerHTML = "";
 
-    button.classList.add('selected');
+    if (!data || !data.results || !data.results.shop || data.results.shop.length === 0) {
+        shopList.innerHTML = '<p style="text-align:center;">近くにお店が見つかりませんでした。</p>';
+        return;
+    }
 
-    buttons.forEach(btn => {
-        if (btn !== button) {
-            btn.classList.add('dimmed');
-        }
+    // 検索範囲を表示
+    const rangeText = document.createElement('p');
+    rangeText.style = "font-size:0.8rem; color:#666; text-align:center;";
+    rangeText.innerText = `(${currentRange}以内の結果)`;
+    shopList.appendChild(rangeText);
+
+    // 3件ランダムに抽出
+    const shops = data.results.shop.sort(() => 0.5 - Math.random()).slice(0, 3);
+
+    shops.forEach(shop => {
+        const shopCard = document.createElement('div');
+        shopCard.className = 'shop-card';
+        shopCard.style = "display:flex; align-items:center; background:#fff; border:1px solid #1a237e; margin-bottom:10px; padding:10px; cursor:pointer; border-radius:10px;";
+
+        shopCard.innerHTML = `
+            <img src="${shop.photo.pc.l}" style="width:80px; height:80px; object-fit:cover; margin-right:15px; border-radius:10px;">
+            <div style="flex:1;">
+                <div class="shop-desc" style="font-weight:bold; margin-bottom:5px;">${shop.name}</div>
+                <div class="shop-desc">${shop.genre.name}<br>${shop.access}</div>
+            </div>
+        `;
+
+        // お店をクリックした時の処理
+        shopCard.onclick = () => {
+            // 0.5秒の遅延を設定
+            setTimeout(() => {
+                // 1. メイン画面の要素を隠す
+                const selectors = ['header', '.container', '.maigo-fuda', '#button-container'];
+                selectors.forEach(sel => {
+                    document.querySelectorAll(sel).forEach(el => {
+                        if (!document.getElementById('mission-screen').contains(el)) {
+                            el.style.display = 'none';
+                        }
+                    });
+                });
+
+                // 2. 選択したカードを移動
+                const selectedPlace = document.getElementById('selected-shop-card');
+                if (selectedPlace) {
+                    selectedPlace.innerHTML = '';
+                    selectedPlace.appendChild(shopCard.cloneNode(true));
+                    selectedPlace.querySelector('.shop-card').onclick = null;
+                }
+
+                // 3. 指令をセット
+                const hint = document.getElementById('drink-hint');
+                const missionDrinkHint = document.getElementById('mission-drink-hint');
+                if (hint && missionDrinkHint) {
+                    missionDrinkHint.innerText = hint.innerText.replace("一杯目は", "一杯目に") + " を頼め";
+                }
+
+                // 4. ミッション画面を表示
+                document.getElementById('mission-screen').style.display = 'block';
+            }, 500);
+        };
+
+        shopList.appendChild(shopCard);
     });
-}
+}  // ← displayShops 関数の終わり（ここが抜けていたのが主な原因）
 
-
-// =========================
-// 2. 次のミッション追加
-// =========================
+// 2. 次のミッションを追加する関数
 function getNextMission() {
-
     const container = document.getElementById('dynamic-mission-container');
     if (!container) return;
 
@@ -196,221 +253,69 @@ function getNextMission() {
         "自分以外が頼んだ酒を頼め",
         "おすすめの日本酒を聞け"
     ];
-
     const randomTask = tasks[Math.floor(Math.random() * tasks.length)];
 
     const newMission = document.createElement('div');
     newMission.className = 'mission-unit';
-    newMission.style.cssText =
-        "margin-top:10px;border-top:1px dashed #ccc;padding-top:10px;";
+    newMission.style.cssText = "margin-top:10px; border-top:1px dashed #ccc; padding-top:10px;";
 
     newMission.innerHTML = `
         <h3 class="order-hint">${randomTask}</h3>
         <div class="mission-btns">
-            <img src="fail.png" class="m-img-btn" onclick="selectResult(this,false)" alt="失敗">
-            <img src="achievement.png" class="m-img-btn" onclick="selectResult(this,true)" alt="達成">
+            <img src="fail.png" class="m-img-btn" onclick="selectResult(this, false)" alt="失敗">
+            <img src="achievement.png" class="m-img-btn" onclick="selectResult(this, true)" alt="達成">
         </div>
     `;
 
     container.appendChild(newMission);
-
-    window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: 'smooth'
-    });
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 }
 
-
-// =========================
-// 3. 店表示
-// =========================
-function displayShops(data, currentRange) {
-
-    const shopList = document.getElementById('shop-list');
-    const hint = document.getElementById('drink-hint');
-
-    const drinks = [
-        "生ビール",
-        "ハイボール",
-        "レモンサワー",
-        "日本酒",
-        "焼酎",
-        "ウーロン茶",
-        "カシオレ",
-        "トマトハイ"
-    ];
-
-    if (hint) {
-        const randomDrink = drinks[Math.floor(Math.random() * drinks.length)];
-        hint.innerText = "一杯目は " + randomDrink;
-    }
-
-    shopList.innerHTML = "";
-
-    if (!data.results || !data.results.shop || data.results.shop.length === 0) {
-        shopList.innerHTML =
-            '<p style="text-align:center;">近くにお店が見つかりませんでした。</p>';
-        return;
-    }
-
-    const rangeText = document.createElement('p');
-    rangeText.style =
-        "font-size:0.8rem;color:#666;text-align:center;";
-    rangeText.innerText = `(${currentRange}以内の結果)`;
-
-    shopList.appendChild(rangeText);
-
-    const shops =
-        data.results.shop.sort(() => 0.5 - Math.random()).slice(0, 3);
-
-    shops.forEach(shop => {
-
-        const shopCard = document.createElement('div');
-        shopCard.className = 'shop-card';
-
-        shopCard.style =
-            "display:flex;align-items:center;background:#fff;border:1px solid #1a237e;margin-bottom:10px;padding:10px;cursor:pointer;border-radius:10px;";
-
-        shopCard.innerHTML = `
-            <img src="${shop.photo.pc.l}" 
-            style="width:80px;height:80px;object-fit:cover;margin-right:15px;border-radius:10px;">
-
-            <div style="flex:1;">
-                <div class="shop-desc" style="font-weight:bold;margin-bottom:5px;">
-                    ${shop.name}
-                </div>
-
-                <div class="shop-desc">
-                    ${shop.genre.name}<br>
-                    ${shop.access}
-                </div>
-            </div>
-        `;
-
-        shopCard.onclick = () => {
-
-            setTimeout(() => {
-
-                const selectors = [
-                    'header',
-                    '.container',
-                    '.maigo-fuda',
-                    '#button-container'
-                ];
-
-                selectors.forEach(sel => {
-                    document.querySelectorAll(sel).forEach(el => {
-
-                        if (!document
-                            .getElementById('mission-screen')
-                            .contains(el)) {
-
-                            el.style.display = 'none';
-                        }
-                    });
-                });
-
-                const selectedPlace =
-                    document.getElementById('selected-shop-card');
-
-                selectedPlace.innerHTML = '';
-                selectedPlace.appendChild(shopCard.cloneNode(true));
-
-                const hint =
-                    document.getElementById('drink-hint');
-
-                const missionDrinkHint =
-                    document.getElementById('mission-drink-hint');
-
-                if (hint && missionDrinkHint) {
-
-                    missionDrinkHint.innerText =
-                        hint.innerText
-                        .replace("一杯目は", "一杯目に") + " を頼め";
-                }
-
-                document.getElementById('mission-screen')
-                    .style.display = 'block';
-
-            }, 500);
-        };
-
-        shopList.appendChild(shopCard);
-
-    });
-
-}
-
-
-// =========================
-// 4. API取得
-// =========================
+// 3. データ取得
 async function fetchAndDisplay(lat, lng, rangeIndex = 1) {
-
     const shopList = document.getElementById('shop-list');
-
-    const rangeLabels = {
-        1: "300m",
-        2: "500m",
-        3: "1000m"
-    };
-
-    shopList.innerHTML =
-        `<p style="text-align:center;">
-        ${rangeLabels[rangeIndex]}圏内を探索中...
-        </p>`;
+    const rangeLabels = {1: "300m", 2: "500m", 3: "1000m"};
+    if (shopList) shopList.innerHTML = `<p style="text-align:center;">${rangeLabels[rangeIndex]}圏内を探索中...</p>`;
 
     try {
-
-        const response =
-            await fetch(`/getShops?lat=${lat}&lng=${lng}&range=${rangeIndex}`);
-
+        const response = await fetch(`/getShops?lat=${lat}&lng=${lng}&range=${rangeIndex}`);
         const data = await response.json();
 
-        if ((!data.results ||
-            !data.results.shop ||
-            data.results.shop.length === 0)
-            && rangeIndex < 3) {
-
+        if ((!data.results || !data.results.shop || data.results.shop.length === 0) && rangeIndex < 3) {
             return fetchAndDisplay(lat, lng, rangeIndex + 1);
         }
-
         displayShops(data, rangeLabels[rangeIndex]);
-
-    } catch {
-
-        shopList.innerHTML =
-            '<p style="text-align:center;">通信エラーが発生しました。</p>';
+    } catch (e) {
+        if (shopList) shopList.innerHTML = '<p style="text-align:center;">通信エラーが発生しました。</p>';
     }
 }
 
-
-// =========================
-// 5. ガチャ開始
-// =========================
+// 4. ガチャ開始
 function startGacha() {
-
-    if (!navigator.geolocation) {
-        alert("位置情報が使用できません");
-        return;
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (pos) => fetchAndDisplay(pos.coords.latitude, pos.coords.longitude),
+            () => alert("位置情報を許可してください")
+        );
     }
-
-    navigator.geolocation.getCurrentPosition(
-
-        (pos) => {
-
-            fetchAndDisplay(
-                pos.coords.latitude,
-                pos.coords.longitude
-            );
-        },
-
-        () => {
-            alert("位置情報を許可してください");
-        }
-
-    );
 }
+
+function selectResult(button, isSuccess) {
+    const parent = button.closest('.mission-btns');
+    if (!parent) return;
+
+    const buttons = parent.querySelectorAll('.m-img-btn');
+
+    buttons.forEach(btn => btn.classList.remove('selected', 'dimmed'));
+
+    button.classList.add('selected');
+    buttons.forEach(btn => {
+        if (btn !== button) {
+            btn.classList.add('dimmed');
+        }
+    });
+}
+</script>
 
 <footer style="text-align: center; margin-top: 50px; margin-bottom: 20px; font-family: sans-serif; font-size: 0.8rem; color: #666;">
     <p>
