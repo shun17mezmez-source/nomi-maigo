@@ -183,6 +183,7 @@ function displayShops(data, currentRange) {
     rangeText.style = "font-size:0.8rem; color:#666; text-align:center;";
     rangeText.innerText = `(${currentRange}以内の結果)`;
     shopList.appendChild(rangeText);
+    
 
     // 3件ランダムに抽出
     const shops = data.results.shop.sort(() => 0.5 - Math.random()).slice(0, 3);
@@ -202,9 +203,9 @@ function displayShops(data, currentRange) {
 
 // お店をクリックした時の処理
 shopCard.onclick = () => {
-    // 0.5秒（500ミリ秒）待ってから処理を開始
+    // 0.5秒の遅延を設定
     setTimeout(() => {
-        // 1. メイン画面の要素をすべて隠す
+        // 1. メイン画面の要素を隠す
         const selectors = ['header', '.container', '.maigo-fuda', '#button-container'];
         selectors.forEach(sel => {
             document.querySelectorAll(sel).forEach(el => {
@@ -214,16 +215,15 @@ shopCard.onclick = () => {
             });
         });
 
-        // 2. 選択したカードのDOMノード自体をミッション画面に移動させる
+        // 2. 選択したカードを移動
         const selectedPlace = document.getElementById('selected-shop-card');
         if (selectedPlace) {
             selectedPlace.innerHTML = '';
             selectedPlace.appendChild(shopCard.cloneNode(true));
-            // 移動した先でクリックを無効化
             selectedPlace.querySelector('.shop-card').onclick = null;
         }
 
-        // 3. 「一杯目」の指令をセット
+        // 3. 指令をセット
         const hint = document.getElementById('drink-hint');
         const missionDrinkHint = document.getElementById('mission-drink-hint');
         if (hint && missionDrinkHint) {
@@ -232,10 +232,10 @@ shopCard.onclick = () => {
 
         // 4. ミッション画面を表示
         document.getElementById('mission-screen').style.display = 'block';
-    }, 500); // setTimeout の終わり
-}; // shopCard.onclick の終わり
+    }, 500); 
+};
+// ↑ ここでonclickを閉じる。余計な } が下にないか確認してください！
 
-// リストに追加
 shopList.appendChild(shopCard);
 
 // 2. 次のミッションを追加する関数
