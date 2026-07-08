@@ -158,9 +158,17 @@
     <div id="dynamic-mission-container"></div>
 
     <div class="footer-btns">
-        <img src="exit.png" class="f-img-btn" onclick="location.reload()" alt="店を出る">
+        <img src="exit.png" class="f-img-btn" onclick="showResult()" alt="店を出る">
         <img src="next.png" class="f-img-btn" onclick="getNextMission()" alt="次の迷子札">
     </div>
+    <!-- ⬇️ ここからリザルト画面（最初は非表示） ⬇️ -->
+    <div id="result-screen" style="display: none; text-align: center; margin-top: 20px; border-top: 2px dashed #1a237e; padding-top: 20px;">
+        <h2 class="section-title">🍻 本日のリザルト 🍻</h2>
+        <div id="result-summary" style="font-size: 1.2rem; margin-bottom: 20px;"></div>
+        <img src="logo.png" style="width: 100px; height: auto; margin-bottom: 20px;"><br>
+        <button onclick="location.reload()" style="padding: 10px 20px; font-size: 1rem; cursor: pointer; border-radius: 5px; background: #1a237e; color: white; border: none;">もう一度迷子になる</button>
+    </div>
+    <!-- ⬆️ ここまで ⬆️ -->
 </div>
 
 <header>
@@ -350,6 +358,34 @@ function selectResult(button, isSuccess) {
             btn.classList.add('dimmed');
         }
     });
+}
+
+// 5. リザルト画面を表示する関数
+function showResult() {
+    // 達成と失敗の数を数える
+    const totalMissions = document.querySelectorAll('.mission-unit').length;
+    const successCount = document.querySelectorAll('.m-img-btn.selected[alt="達成"]').length;
+    
+    // お店の名前を取得
+    const shopName = document.querySelector('#selected-shop-card .shop-desc')?.innerText || "居酒屋";
+
+    // 結果のメッセージを作る
+    const resultSummary = document.getElementById('result-summary');
+    resultSummary.innerHTML = `
+        <p><strong>${shopName}</strong> での呑みが終了しました！</p>
+        <p style="font-size: 1.5rem; color: #1a237e; font-weight: bold;">
+            ミッション達成率: ${successCount} / ${totalMissions}
+        </p>
+        <p>${successCount === totalMissions ? '🎉 パーフェクト！素晴らしい呑みっぷりです！' : '👍 お疲れ様でした！次も楽しく呑みましょう！'}</p>
+    `;
+
+    // 途中のミッションやボタンのエリアを非表示にする
+    document.getElementById('first-mission-unit').style.display = 'none';
+    document.getElementById('dynamic-mission-container').style.display = 'none';
+    document.querySelector('.footer-btns').style.display = 'none';
+
+    // リザルト画面を表示する
+    document.getElementById('result-screen').style.display = 'block';
 }
 </script>
 
