@@ -19,7 +19,9 @@
     <style>
         body {
             margin: 0;
-            font-family: "hot-gekai11kk", "Sawarabi Mincho", serif;
+            font-family: "ah-hakushu-rs", sans-serif;
+            font-weight: 900;
+            font-style: normal;
             background-image: url('BG.png'); 
             background-size: cover;
             background-attachment: fixed;
@@ -372,11 +374,11 @@ function showResult() {
     // 結果のメッセージを作る
     const resultSummary = document.getElementById('result-summary');
     resultSummary.innerHTML = `
-        <p><strong>${shopName}</strong> での呑みが終了しました！</p>
+        <p class="shop-desc"><strong>${shopName}</strong> での呑みが終了しました！</p>
         <p style="font-size: 1.5rem; color: #1a237e; font-weight: bold;">
             ミッション達成率: ${successCount} / ${totalMissions}
         </p>
-        <p>${successCount === totalMissions ? '🎉 パーフェクト！素晴らしい呑みっぷりです！' : '👍 お疲れ様でした！次も楽しく呑みましょう！'}</p>
+        <p class="shop-desc">${successCount === totalMissions ? 'パーフェクト！素晴らしい呑みっぷりです！' : 'お疲れ様でした！次も楽しく呑みましょう！'}</p>
     `;
 
     // 途中のミッションやボタンのエリアを非表示にする
