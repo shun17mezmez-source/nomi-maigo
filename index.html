@@ -66,7 +66,7 @@
 
         /* 画像ボタンのスタイル */
         .m-img-btn {
-            width: 60px; /* 達成・失敗ボタンの横幅 */
+            width: auto; /* 達成・失敗ボタンの横幅 */
             height: auto;
             cursor: pointer;
             transition: transform 0.1s;
@@ -161,13 +161,13 @@
     margin-top: 15px;
 }
 .res-img-btn {
-    width: 240px;          /* ➔ ボタンの横幅（お好みで調整してください） */
-    height: auto;
+    height: 45px;          /* ➔ まず2つのボタンの「縦幅」を共通のサイズで固定します！ */
+    width: auto;           /* ➔ 横幅は画像の比率を崩さずに自動調整させます */
     cursor: pointer;
     transition: transform 0.1s;
 }
 .res-img-btn:active {
-    transform: scale(0.95); /* 押したときにちょっと凹む演出 */
+    transform: scale(0.95);
 }
     </style>
 </head>
