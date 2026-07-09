@@ -58,7 +58,10 @@
             text-overflow: ellipsis;
         }
 
-        .mission-unit { margin-bottom: 5px; }
+        .mission-unit {/* 迷子札 */
+            margin-bottom: 5px ;  /* 下の点線との外側の隙間をゼロにする */
+            padding-bottom: 5px ; /* 内側の余分な隙間もゼロにする */
+}
         .mission-btns { display: flex; justify-content: space-around; gap: 10px; }
 
         /* 画像ボタンのスタイル */
@@ -71,7 +74,7 @@
         .m-img-btn:active { transform: scale(0.95); }
 
         .f-img-btn {
-            width: 180px; /* 下部ボタンの横幅 */
+            width: 140px; /* 下部ボタンの横幅 */
             height: auto;
             cursor: pointer;
         }
@@ -384,11 +387,11 @@ function showResult() {
     // 結果のメッセージを作る
     const resultSummary = document.getElementById('result-summary');
     resultSummary.innerHTML = `
-        <p><strong>${shopName}</strong> での呑みが終了しました！</p>
+        <p><strong>${shopName}</strong> <br>での呑みが終了しました！</p>
         <p style="font-size: 1.5rem; color: #1a237e; font-weight: bold;">
             ミッション達成率: ${successCount} / ${totalMissions}
         </p>
-        <p>${successCount === totalMissions ? 'パーフェクト！素晴らしい呑みっぷりです！' : 'お疲れ様でした！次も楽しく呑みましょう！'}</p>
+        <p>${successCount === totalMissions ? 'パーフェクト！<br>素晴らしい呑みっぷりです！' : 'お疲れ様でした！<br>次も楽しく呑みましょう！'}</p>
     `;
 
     // 途中のミッションやボタンのエリアを非表示にする
