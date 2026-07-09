@@ -111,7 +111,7 @@
        .section-title {
             text-align: center;
             margin-top: 5px !important;    /* ➔ マイナス値を指定して、上の画像側へグッと引っ張り上げる！ */
-            margin-bottom: 0px !important; /* ➔ 下のお店枠との隙間（お好みで調整） */
+            margin-bottom: -10px !important; /* ➔ 下のお店枠との隙間（お好みで調整） */
             font-size: 1.2rem;
 }
         .shop-card {
@@ -120,10 +120,20 @@
             background: #fff;
             border: 2.5px solid rgba(26, 35, 126, 0.5) !important; /* 店情報　枠 */
 }
-        /* お店情報　フォント設定 */
+       /* お店情報専用のフォント・サイズ設定 */
+        .shop-card {
+            height: 140px; /* ➔ カード全体の高さを統一（画像が収まる丁度いい高さ） */
+        }
+
         .shop-card, .shop-card * {
             font-family: sans-serif !important;
             font-weight: normal;
+        }
+        .shop-card p, 
+        .shop-card div:not(.shop-name) { 
+            font-size: 0.85rem !important; /* ➔ 文字サイズを少し小さめに（標準は1rem） */
+            line-height: 1.3;              /* ➔ 行の間隔を少し詰めてスッキリさせる */
+            margin: 3px 0;                 /* ➔ 文字上下の隙間を狭くする */
         }
 .result-text {
     font-family: sans-serif !important;
