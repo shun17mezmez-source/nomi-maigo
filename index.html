@@ -107,10 +107,9 @@
         .section-title { text-align: center; margin-top: 0; font-size: 1.2rem; }
         .shop-card { display: flex; align-items: center; background: #fff; border: 1px solid #1a237e; margin-bottom: 12px; padding: 10px; text-align: left; }
         /* お店情報専用のフォント設定 */
-.shop-desc {
+.result-text {
     font-family: sans-serif !important;
-    font-size: 0.9rem; /* 必要に応じてサイズ調整してください */
-    line-height: 1.4;
+    font-weight: normal !important;
 }
 /* フェードアウト用のクラス */
 .fade-out {
@@ -374,11 +373,11 @@ function showResult() {
     // 結果のメッセージを作る
     const resultSummary = document.getElementById('result-summary');
     resultSummary.innerHTML = `
-        <p class="shop-desc"><strong>${shopName}</strong> での呑みが終了しました！</p>
+        <p class="result-text"><strong>${shopName}</strong> での呑みが終了しました！</p>
         <p style="font-size: 1.5rem; color: #1a237e; font-weight: bold;">
             ミッション達成率: ${successCount} / ${totalMissions}
         </p>
-        <p class="shop-desc">${successCount === totalMissions ? 'パーフェクト！素晴らしい呑みっぷりです！' : 'お疲れ様でした！次も楽しく呑みましょう！'}</p>
+        <p class="result-text">${successCount === totalMissions ? 'パーフェクト！素晴らしい呑みっぷりです！' : 'お疲れ様でした！次も楽しく呑みましょう！'}</p>
     `;
 
     // 途中のミッションやボタンのエリアを非表示にする
