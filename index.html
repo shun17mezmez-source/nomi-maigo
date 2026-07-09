@@ -64,14 +64,16 @@
 }
         .mission-btns { display: flex; justify-content: space-around; gap: 10px; }
 
-        /* 画像ボタンのスタイル */
+        /* 画像ボタンのスタイル （達成・失敗）*/
         .m-img-btn {
-            width: auto; /* 達成・失敗ボタンの横幅 */
-            height: 20px;
+            height: 45px;          /* ➔ 下のボタンと同じ「45px」に指定して高さを揃える！ */
+            width: auto;           /* ➔ 横幅は比率に合わせて自動調整 */
             cursor: pointer;
             transition: transform 0.1s;
         }
-        .m-img-btn:active { transform: scale(0.95); }
+.m-img-btn:active {
+    transform: scale(0.95); /* 押した時に少し凹む演出 */
+}
 
         .f-img-btn {
             width: auto; /* 下部ボタンの横幅 */
@@ -85,12 +87,6 @@
             margin-top: 10px; 
             width: 100%;
         }
-        .m-img-btn {
-    width: 140px;
-    height: auto;
-    cursor: pointer;
-    transition: transform 0.2s, opacity 0.2s; /* アニメーション設定 */
-}
 
 /* 選択されたボタン（大きく表示） */
 .m-img-btn.selected {
