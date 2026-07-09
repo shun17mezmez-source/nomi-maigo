@@ -66,7 +66,7 @@
 
         /* 画像ボタンのスタイル （達成・失敗）*/
         .m-img-btn {
-            height: 45px;          /* ➔ 下のボタンと同じ「45px」に指定して高さを揃える！ */
+            height: 40px;          /* ➔ 下のボタンと同じ「45px」に指定して高さを揃える！ */
             width: auto;           /* ➔ 横幅は比率に合わせて自動調整 */
             cursor: pointer;
             transition: transform 0.1s;
@@ -81,11 +81,13 @@
             cursor: pointer;
         }
 
-        .footer-btns { 
-            display: flex; 
-            justify-content: space-around; 
-            margin-top: 10px; 
-            width: 100%;
+        .footer-btns {
+             display: flex;
+             flex-direction: column-reverse; /* ➔ 縦並びにして、上下をひっくり返す（店を出るが下になる） */
+                align-items: center;            /* ➔ ボタンを真ん中に寄せる */
+                gap: 10px;                      /* ➔ ボタンとボタンの間のスキマ */
+                margin-top: 15px;
+                width: 100%;
         }
 
 /* 選択されたボタン（大きく表示） */
@@ -106,6 +108,10 @@
         .section-title { text-align: center; margin-top: 0; font-size: 1.2rem; }
         .shop-card { display: flex; align-items: center; background: #fff; border: 1px solid #1a237e; margin-bottom: 12px; padding: 10px; text-align: left; }
         /* お店情報専用のフォント設定 */
+        .shop-card, .shop-card * {
+            font-family: sans-serif !important;
+            font-weight: normal;
+        }
 .result-text {
     font-family: sans-serif !important;
     font-weight: normal !important;
