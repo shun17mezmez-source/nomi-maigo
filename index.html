@@ -108,11 +108,17 @@
         /* 以下、既存のレイアウト維持用CSS */
         header { width: 100%; padding: 30px 0 10px; display: flex; justify-content: center; align-items: center; }
         .container, .maigo-fuda { width: 92%; max-width: 400px; margin: 20px auto; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); box-sizing: border-box; }
-       .section-title {
-            text-align: center;
-            margin-top: 5px !important;    /* ➔ マイナス値を指定して、上の画像側へグッと引っ張り上げる！ */
-            margin-bottom: -10px !important; /* ➔ 下のお店枠との隙間（お好みで調整） */
-            font-size: 1.2rem;
+     /* 通常のタイトル（ミッション画面の文字など）の間隔を元に戻す */
+.section-title {
+    text-align: center;
+    margin-top: 10px !important;    /* ➔ ここをプラスの数値に戻してボタンとの重なりを解消！ */
+    margin-bottom: 10px !important; /* ➔ 文字の下側にも適度な隙間を作る */
+    font-size: 1.2rem;
+}
+
+#result-screen .section-title {
+    margin-top: -32px !important;   /* ➔ お店候補画面のときだけこのマイナスを効かせる */
+    margin-bottom: 2px !important;
 }
         .shop-card {
             display: flex;
