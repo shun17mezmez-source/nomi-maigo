@@ -66,7 +66,7 @@
 
         /* 画像ボタンのスタイル */
         .m-img-btn {
-            width: 130px; /* 達成・失敗ボタンの横幅 */
+            width: 60px; /* 達成・失敗ボタンの横幅 */
             height: auto;
             cursor: pointer;
             transition: transform 0.1s;
@@ -152,6 +152,23 @@
     height: auto;
     display: inline-block;
 }
+/* リザルト画面の画像ボタン用スタイル */
+.result-btns {
+    display: flex;
+    flex-direction: column; /* ボタンを縦に並べる */
+    align-items: center;
+    gap: 12px;             /* ボタンとボタンの間のすき間 */
+    margin-top: 15px;
+}
+.res-img-btn {
+    width: 240px;          /* ➔ ボタンの横幅（お好みで調整してください） */
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+.res-img-btn:active {
+    transform: scale(0.95); /* 押したときにちょっと凹む演出 */
+}
     </style>
 </head>
 
@@ -181,9 +198,15 @@
         <div class="section-title-img"><img src="result.png" alt="リザルト"></div>
         <div id="result-summary" style="font-size: 1.2rem; margin-bottom: 20px;"></div>
         <img src="logo.png" style="width: 100px; height: auto; margin-bottom: 20px;"><br>
-        <button onclick="location.reload()" style="padding: 10px 20px; font-size: 1rem; cursor: pointer; border-radius: 5px; background: #1a237e; color: white; border: none;">もう一度迷子になる</button>
+        <div class="result-btns">
+    <!-- もう一度迷子になるボタン -->
+    <img src="more.png" class="res-img-btn" onclick="location.reload()" alt="もう一度迷子になる">
+    
+    <!-- ポストするボタン -->
+    <img src="post.png" class="res-img-btn" onclick="shareToX()" alt="Xポスト">
+</div>
     </div>
-    <!-- ⬆️ ここまで ⬆️ -->
+
 </div>
 
 <header>
@@ -199,7 +222,7 @@
 
 <div class="maigo-fuda">
     <div class="section-title-img"><img src="plate.png" alt="迷子札"></div>
-    <div id="drink-hint" class="order-hint">一杯目は何飲む？</div>
+    <div id="drink-hint" class="order-hint">一杯目、何飲む？</div>
 </div>
 
 <div id="button-container" style="text-align: center;">
@@ -401,6 +424,14 @@ function showResult() {
 
     // リザルト画面を表示する
     document.getElementById('result-screen').style.display = 'block';
+}
+// X（Twitter）にシェアする機能
+function shareToX() {
+    const text = encodeURIComponent("呑み迷子で新しい居酒屋を開拓中！\n今日のミッション達成率");
+    const url = encodeURIComponent(window.location.href); // アプリのURL（自動取得）
+    
+    // Xのポスト画面を別タブで開く
+    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
 }
 </script>
 
