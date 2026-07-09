@@ -39,7 +39,8 @@
 
         h2, h3 {
             text-align: center;
-            margin-bottom: 5px;
+            margin-top: 1px !important;    /* ➔ 上の「お店候補」画像との隙間を狭くする */
+            margin-bottom: 3px !important; /* ➔ 下の「お店の枠」との隙間を狭くする */
         }
 
         .order-hint {
@@ -106,7 +107,12 @@
         header { width: 100%; padding: 30px 0 10px; display: flex; justify-content: center; align-items: center; }
         .container, .maigo-fuda { width: 92%; max-width: 400px; margin: 20px auto; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); box-sizing: border-box; }
         .section-title { text-align: center; margin-top: 0; font-size: 1.2rem; }
-        .shop-card { display: flex; align-items: center; background: #fff; border: 1px solid #1a237e; margin-bottom: 12px; padding: 10px; text-align: left; }
+        .shop-card {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border: 2.5px solid #1a237e; /* ➔ ここを 2.5px や 3px に太くする！ */
+}
         /* お店情報専用のフォント設定 */
         .shop-card, .shop-card * {
             font-family: sans-serif !important;
@@ -199,13 +205,14 @@
     <div id="result-screen" style="display: none; text-align: center; margin-top: 20px; border-top: 2px dashed #1a237e; padding-top: 20px;">
         <div class="section-title-img"><img src="result.png" alt="リザルト"></div>
         <div id="result-summary" style="font-size: 1.2rem; margin-bottom: 20px;"></div>
-        <img src="logo.png" style="width: 100px; height: auto; margin-bottom: 20px;"><br>
+
         <div class="result-btns">
     <!-- もう一度迷子になるボタン -->
     <img src="more.png" class="res-img-btn" onclick="location.reload()" alt="もう一度迷子になる">
     
     <!-- ポストするボタン -->
     <img src="post.png" class="res-img-btn" onclick="shareToX()" alt="Xポスト">
+    <img src="logo.png" style="width: 100px; height: auto; margin-top: 20px; display: block; margin-left: auto; margin-right: auto;">
 </div>
     </div>
 
