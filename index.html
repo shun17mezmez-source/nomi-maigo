@@ -138,17 +138,28 @@
     opacity: 0; /* 最初は透明にしておく */
     transition: opacity 0.5s;
 }
+/* タイトル画像のサイズと位置の調整 */
+.section-title-img {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.section-title-img img {
+    max-width: 200px; /* ➔ 画像が大きすぎる場合は、この数字（200）を小さくして調整してください */
+    height: auto;
+    display: inline-block;
+}
     </style>
 </head>
 
 <body>
 
 <div id="mission-screen" class="container" style="display: none;">
-    <h2 class="section-title">お店</h2>
+    <div class="section-title-img"><img src="shop.png" alt="お店"></div>
     <div id="selected-shop-card"></div>
 
     <div id="first-mission-unit" class="mission-unit" style="margin-top:20px; border-top:1px dashed #ccc; padding-top:20px;">
-    <h3 class="section-title">迷子札</h3>
+    <div class="section-title-img"><img src="plate.png" alt="迷子札"></div>
     <div id="mission-drink-hint" class="order-hint"></div>
     <div class="mission-btns">
     <img src="fail.png" class="m-img-btn" onclick="selectResult(this, false)" alt="失敗">
@@ -164,7 +175,7 @@
     </div>
     <!-- ⬇️ ここからリザルト画面（最初は非表示） ⬇️ -->
     <div id="result-screen" style="display: none; text-align: center; margin-top: 20px; border-top: 2px dashed #1a237e; padding-top: 20px;">
-        <h2 class="section-title">本日のリザルト</h2>
+        <h2 class="section-title">本日のリザルト</h2> <!-- または リザルト -->
         <div id="result-summary" style="font-size: 1.2rem; margin-bottom: 20px;"></div>
         <img src="logo.png" style="width: 100px; height: auto; margin-bottom: 20px;"><br>
         <button onclick="location.reload()" style="padding: 10px 20px; font-size: 1rem; cursor: pointer; border-radius: 5px; background: #1a237e; color: white; border: none;">もう一度迷子になる</button>
@@ -179,7 +190,7 @@
 </header>
 
 <div class="container">
-    <h2 class="section-title">お店候補</h2>
+    <div class="section-title-img"><img src="shoplist.png" alt="お店候補"></div>
     <div id="shop-list"></div> 
 </div>
 
