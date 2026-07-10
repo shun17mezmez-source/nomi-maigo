@@ -60,13 +60,20 @@
         }
 
         .mission-unit {/* 迷子札 */
-            margin-bottom: 20px ;
+            margin-bottom: 12px ;
             padding-top: 5px;
-            padding-bottom: 1px ;
+            padding-bottom: 8px ;
             font-size: 20px; /* ➔ ここを追加！文字を大きくします（24px〜28pxあたりがおすすめ） */
             text-align: center; /* ➔ もし真ん中寄せにしたい場合はこれも入れておくと安心です */
 }
-        .mission-btns { display: flex; justify-content: space-around; gap: 10px; }
+        .mission-btns {/* 迷子札    ボタン間隔*/
+            display: flex;
+            justify-content: space-around;
+            gap: 12px;
+            margin-top: 6px !important;      /* 文字とボタンの間の余白 */
+            margin-bottom: 18px !important;  /* 下の区切り線や次のミッションまでの余白 */
+}
+        
 
         /* 画像ボタンのスタイル （達成・失敗）*/
         .m-img-btn {
