@@ -71,7 +71,7 @@
             justify-content: space-around;
             gap: 12px;
             margin-top: 8px !important;      /* 文字とボタンの間の余白 */
-            margin-bottom: 6px !important;  /* 下の区切り線や次のミッションまでの余白 */
+            margin-bottom: 2px !important;  /* 下の区切り線や次のミッションまでの余白 */
 }
         
 
@@ -208,6 +208,46 @@
 .res-img-btn:active {
     transform: scale(0.95);
 }
+/* ==========================================
+   リザルト画面：指令履歴のスタイル
+========================================== */
+
+/* 履歴全体のコンテナ */
+#result-missions-container {
+    margin: 20px auto;
+    max-width: 320px;       /* ➔ 画面中央に綺麗に収まる横幅 */
+    text-align: left;       /* ➔ はんこと文字を左揃えにする */
+    padding: 0 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;              /* ➔ 指令ごとの上下の間隔 */
+}
+
+/* 各指令の行 */
+.result-mission-item {
+    display: flex;
+    align-items: center;    /* ➔ はんこと文字の上下中央を揃える */
+    font-family: "sicyubi-futofuder", sans-serif; /* ➔ 筆文字フォント */
+    font-size: 20px;
+    font-weight: bold;
+    color: #000;
+    min-height: 36px;       /* ➔ 行の最低の高さを揃えてガタつき防止 */
+}
+
+/* 達成はんこ（stamp.png） */
+.result-stamp {
+    height: 32px;           /* ➔ 文字の大きさに合わせたサイズ */
+    width: auto;
+    margin-right: 12px;     /* ➔ はんこと文字の間の隙間 */
+    flex-shrink: 0;         /* ➔ 画像が横に潰れるのを防ぐ */
+}
+
+/* ❌ 失敗したミッション */
+.result-mission-item.failed {
+    opacity: 0.25;          /* ➔ 不透明度を下げて薄く（グレーアウト）する */
+    /* 🔥 はんこが無い分、文字の開始位置を右にずらして、成功した行と頭を揃える */
+    padding-left: 44px;     /* 「はんこの高さ(32px) + 隙間(12px)」と同じ数値 */
+}
     </style>
 </head>
 
@@ -236,6 +276,7 @@
     <div id="result-screen" style="display: none; text-align: center; margin-top: 20px; border-top: 2px dashed #1a237e; padding-top: 20px;">
         <div class="section-title-img"><img src="result.png" alt="リザルト"></div>
         <div id="result-summary" style="font-size: 1.2rem; margin-bottom: 20px;"></div>
+        <div id="result-missions-container"></div>
 
         <div class="result-btns">
     <!-- もう一度迷子になるボタン -->
@@ -444,6 +485,38 @@ function showResult() {
     const totalMissions = document.querySelectorAll('.mission-unit').length;
     const successCount = document.querySelectorAll('.m-img-btn.selected[alt="達成"]').length;
     
+    // 🌟 履歴（指令とはんこ）を生成してリザルト画面に流し込む
+    const missionsContainer = document.getElementById('result-missions-container');
+    if (missionsContainer) {
+        missionsContainer.innerHTML = ''; // リセット
+        
+        document.querySelectorAll('.mission-unit').forEach(unit => {
+            // ミッションのテキストを取得（h3 や p、.order-hint など適切な要素から文字を抜く）
+            const textElement = unit.querySelector('.order-hint') || unit.querySelector('h3') || unit.querySelector('p');
+            if (!textElement) return;
+            const missionText = textElement.innerText.trim();
+
+            // 達成ボタンが選ばれているか判定
+            const isSuccess = unit.querySelector('.m-img-btn.selected[alt="達成"]') !== null;
+
+            // HTMLの組み立て
+            const item = document.createElement('div');
+            item.classList.add('result-mission-item');
+
+            if (isSuccess) {
+                item.innerHTML = `
+                    <img src="stamp.png" class="result-stamp" alt="達成">
+                    <span class="result-mission-text">${missionText}</span>
+                `;
+            } else {
+                item.classList.add('failed');
+                item.innerHTML = `
+                    <span class="result-mission-text">${missionText}</span>
+                `;
+            }
+            missionsContainer.appendChild(item);
+        });
+    }
     // お店の名前を取得
     const shopName = document.querySelector('#selected-shop-card .shop-desc')?.innerText || "居酒屋";
 
