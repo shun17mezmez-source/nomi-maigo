@@ -218,7 +218,7 @@
     margin: 20px auto;
     max-width: 320px;       /* ➔ 画面中央に綺麗に収まる横幅 */
     text-align: left;       /* ➔ はんこと文字を左揃えにする */
-    padding: 0 15px;
+    padding: 0 15px 0 15px;    
     display: flex;
     flex-direction: column;
     gap: 10px;              /* ➔ 指令ごとの上下の間隔 */
@@ -233,6 +233,12 @@
     font-weight: bold;
     color: #000;
     min-height: 36px;       /* ➔ 行の最低の高さを揃えてガタつき防止 */
+    margin-bottom: 2px;  
+}
+
+/* 最後の指令だけ下余白をなくす */
+.result-mission-item:last-child {
+    margin-bottom: 0 !important;
 }
 
 /* 達成はんこ（stamp.png） */
@@ -523,7 +529,7 @@ function showResult() {
     const resultSummary = document.getElementById('result-summary');
     resultSummary.innerHTML = `
         <p><strong>${shopName}</strong> <br>での呑みが終了しました！</p>
-        <p style="font-size: 1.5rem; color: #1a237e; font-weight: bold; margin-bottom: 20px;">
+        <p style="font-size: 1.5rem; color: #1a237e; font-weight: bold; margin-bottom: 0px;">
             ミッション達成率: ${successCount} / ${totalMissions}
         </p>
     `;
