@@ -220,7 +220,7 @@
     padding: 0 15px;
     display: flex;
     flex-direction: column;
-    gap: 12px;              /* ➔ 指令ごとの上下の間隔 */
+    gap: 10px;              /* ➔ 指令ごとの上下の間隔 */
 }
 
 /* 各指令の行 */
@@ -485,21 +485,18 @@ function showResult() {
     const totalMissions = document.querySelectorAll('.mission-unit').length;
     const successCount = document.querySelectorAll('.m-img-btn.selected[alt="達成"]').length;
     
-    // 🌟 履歴（指令とはんこ）を生成してリザルト画面に流し込む
+    // 🌟 履歴（指令とはんこ）を生成
     const missionsContainer = document.getElementById('result-missions-container');
     if (missionsContainer) {
-        missionsContainer.innerHTML = ''; // リセット
+        missionsContainer.innerHTML = ''; 
         
         document.querySelectorAll('.mission-unit').forEach(unit => {
-            // ミッションのテキストを取得（h3 や p、.order-hint など適切な要素から文字を抜く）
             const textElement = unit.querySelector('.order-hint') || unit.querySelector('h3') || unit.querySelector('p');
             if (!textElement) return;
             const missionText = textElement.innerText.trim();
 
-            // 達成ボタンが選ばれているか判定
             const isSuccess = unit.querySelector('.m-img-btn.selected[alt="達成"]') !== null;
 
-            // HTMLの組み立て
             const item = document.createElement('div');
             item.classList.add('result-mission-item');
 
@@ -517,34 +514,39 @@ function showResult() {
             missionsContainer.appendChild(item);
         });
     }
+
     // お店の名前を取得
     const shopName = document.querySelector('#selected-shop-card .shop-desc')?.innerText || "居酒屋";
 
-    // 結果のメッセージを作る
+    // 結果サマリー（上部）
     const resultSummary = document.getElementById('result-summary');
     resultSummary.innerHTML = `
         <p><strong>${shopName}</strong> <br>での呑みが終了しました！</p>
-        <p style="font-size: 1.5rem; color: #1a237e; font-weight: bold;">
+        <p style="font-size: 1.5rem; color: #1a237e; font-weight: bold; margin-bottom: 20px;">
             ミッション達成率: ${successCount} / ${totalMissions}
         </p>
-        <p>${successCount === totalMissions ? 'パーフェクト！<br>素晴らしい呑みっぷりです！' : 'お疲れ様でした！<br>次も楽しく呑みましょう！'}</p>
     `;
 
-    // 途中のミッションやボタンのエリアを非表示にする
+    // ====================== ここから追加 ======================
+    // ミッション一覧の下に表示するメッセージ（パーフェクトかで分岐）
+    const messageHTML = successCount === totalMissions 
+        ? `<p style="margin-top: 35px; font-size: 1.35rem; text-align: center; line-height: 1.6;">
+            パーフェクト！<br>素晴らしい呑みっぷりです！
+           </p>`
+        : `<p style="margin-top: 35px; font-size: 1.35rem; text-align: center; line-height: 1.6;">
+            お疲れ様でした！<br>次も楽しく呑みましょう！
+           </p>`;
+
+    missionsContainer.insertAdjacentHTML('afterend', messageHTML);
+    // ====================== ここまで ======================
+
+    // 途中画面を非表示
     document.getElementById('first-mission-unit').style.display = 'none';
     document.getElementById('dynamic-mission-container').style.display = 'none';
     document.querySelector('.footer-btns').style.display = 'none';
 
-    // リザルト画面を表示する
+    // リザルト画面を表示
     document.getElementById('result-screen').style.display = 'block';
-}
-// X（Twitter）にシェアする機能
-function shareToX() {
-    const text = encodeURIComponent("呑み迷子で新しい居酒屋を開拓中！\n今日のミッション達成率");
-    const url = encodeURIComponent(window.location.href); // アプリのURL（自動取得）
-    
-    // Xのポスト画面を別タブで開く
-    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
 }
 </script>
 
