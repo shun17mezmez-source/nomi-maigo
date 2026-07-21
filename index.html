@@ -255,6 +255,10 @@
     /* 🔥 はんこが無い分、文字の開始位置を右にずらして、成功した行と頭を揃える */
     padding-left: 44px;     /* 「はんこの高さ(32px) + 隙間(12px)」と同じ数値 */
 }
+/* 文字数が長いのときに適用する小さめフォント */
+.small-text {
+    font-size: 0.9rem !important; /* 通常より一回り小さくする */
+}
     </style>
 </head>
 
@@ -449,8 +453,10 @@ function getNextMission() {
     newMission.className = 'mission-unit';
     newMission.style.cssText = "margin-top:10px; border-top:1px dashed #ccc; padding-top:10px;";
 
+    const textSizeClass = randomTask.length >= 13 ? 'small-text' : '';
+
     newMission.innerHTML = `
-        <h3 class="order-hint">${randomTask}</h3>
+        <h3 class="order-hint ${textSizeClass}">${randomTask}</h3>
         <div class="mission-btns">
             <img src="fail.png" class="m-img-btn" onclick="selectResult(this, false)" alt="失敗">
             <img src="achievement.png" class="m-img-btn" onclick="selectResult(this, true)" alt="達成">
