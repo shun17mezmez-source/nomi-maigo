@@ -451,9 +451,17 @@ function getNextMission() {
     container.appendChild(newMission);
     window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 }
-
-// 以降の関数（fetchAndDisplay, startGacha, selectResult, showResult, shareToX）は変更なし
-// ... 残りの関数をここに貼り付けてください
+// 4. ガチャ開始
+function startGacha() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (pos) => fetchAndDisplay(pos.coords.latitude, pos.coords.longitude),
+            () => alert("位置情報を許可してください")
+        );
+    } else {
+        alert("位置情報が利用できません");
+    }
+}
 </script>
 
 <footer style="text-align: center; margin-top: 50px; margin-bottom: 20px; font-family: sans-serif; font-size: 0.8rem; color: #666;">
