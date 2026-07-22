@@ -257,7 +257,7 @@
 }
 /* 文字数が長いのときに適用する小さめフォント */
 .small-text {
-    font-size: 0.97rem !important; /* 通常より一回り小さくする */
+    font-size: 0.9998rem !important; /* 通常より一回り小さくする */
 }
     </style>
 </head>
@@ -327,7 +327,7 @@
 function displayShops(data, currentRange) {
     const shopList = document.getElementById('shop-list');
     const hint = document.getElementById('drink-hint');
-    const drinks = ["生ビール", "ハイボール", "レモンサワー", "日本酒", "焼酎", "ウーロンハイ", "カシオレ", "トマトハイ"];
+    const drinks = ["生ビール", "生ビール","生ビール","生ビール","生ビール","生ビール","ハイボール","ハイボール", "ハイボール", "レモンサワー","レモンサワー","レモンサワー", "日本酒", "焼酎", "ウーロンハイ", "カシオレ", "トマトハイ"];
 
     // 迷子札の内容を決定
     if (hint) {
@@ -567,10 +567,10 @@ function showResult() {
     // ミッション一覧の下に表示するメッセージ（パーフェクトかで分岐）
     const messageHTML = successCount === totalMissions 
         ? `<p style="margin-top: 0px; font-size: 1.rem; text-align: center; line-height: 1.6;">
-            パーフェクト！<br>素晴らしい呑みっぷりです！
+            パーフェクト！<br>完璧な呑みっぷり！
            </p>`
         : `<p style="margin-top: 35px; font-size: 1.35rem; text-align: center; line-height: 1.6;">
-            お疲れ様でした！<br>次も楽しく呑みましょう！
+            お疲れ様！<br>もう一軒行く？
            </p>`;
 
     missionsContainer.insertAdjacentHTML('afterend', messageHTML);
@@ -583,6 +583,20 @@ function showResult() {
 
     // リザルト画面を表示
     document.getElementById('result-screen').style.display = 'block';
+}
+function shareToX() {
+    const totalMissions = document.querySelectorAll('.mission-unit').length || 1;
+    const successCount = document.querySelectorAll('.m-img-btn.selected[alt="達成"]').length || 0;
+
+    const text = encodeURIComponent(
+        `呑み迷子で新しい居酒屋を開拓中！\n` +
+        `今日のミッション達成率: ${successCount} / ${totalMissions}\n` +
+        `#呑み迷子`
+    );
+
+    const url = encodeURIComponent(window.location.href);
+
+    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
 }
 </script>
 
