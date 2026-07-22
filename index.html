@@ -334,6 +334,11 @@
 
 
 <script>
+    // グローバル変数（一度使ったミッションを記録）
+let usedMissions = [];
+
+function getNextMission() {
+    // ... ここから下はあなたの現在のコードのまま ...
 // 1. お店を表示する関数
 function displayShops(data, currentRange) {
     const shopList = document.getElementById('shop-list');
