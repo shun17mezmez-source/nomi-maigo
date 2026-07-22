@@ -260,6 +260,17 @@
     font-size: 0.9998rem !important; /* 通常より一回り小さくする */
 }
     </style>
+<!-- PWA ホーム画面アイコン設定 -->
+<link rel="manifest" href="manifest.json">
+
+<!-- iOS用 -->
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="呑み迷子">
+
+<!-- その他 -->
+<meta name="theme-color" content="#1a237e">
 </head>
 
 <body>
@@ -447,8 +458,26 @@ function getNextMission() {
         "利き手と反対の手だけで<br>次のつまみを食べきれ",
         "箸立てや調味料入れの<br>こだわりを観察せよ"
     ];
-    const randomTask = tasks[Math.floor(Math.random() * tasks.length)];
 
+    // 使用済みリストから除外して候補を作成
+    let availableTasks = tasks.filter(task => !usedMissions.includes(task));
+
+    // 候補が少なくなったら使用済みリストをリセット
+    if (availableTasks.length === 0) {
+        usedMissions = [];
+        availableTasks = [...tasks];
+    }
+
+    // ランダム選択
+    const randomTask = availableTasks[Math.floor(Math.random() * availableTasks.length)];
+
+    // 使用済みに追加（最大10個まで記憶）
+    usedMissions.push(randomTask);
+    if (usedMissions.length > 10) {
+        usedMissions.shift(); // 古いものから削除
+    }
+
+    // --- 以下は既存のミッション作成部分 ---
     const newMission = document.createElement('div');
     newMission.className = 'mission-unit';
     newMission.style.cssText = "margin-top:10px; border-top:1px dashed #ccc; padding-top:10px;";
@@ -570,7 +599,7 @@ function showResult() {
             パーフェクト！<br>完璧な呑みっぷり！
            </p>`
         : `<p style="margin-top: 35px; font-size: 1.35rem; text-align: center; line-height: 1.6;">
-            お疲れ様！<br>もう一軒行く？
+            お疲れ様！<br>もう一軒行こ！
            </p>`;
 
     missionsContainer.insertAdjacentHTML('afterend', messageHTML);
@@ -584,7 +613,7 @@ function showResult() {
     // リザルト画面を表示
     document.getElementById('result-screen').style.display = 'block';
 }
-function shareToX() {
+function shareToX() {     // ← ここが shareToX になっているか確認
     const totalMissions = document.querySelectorAll('.mission-unit').length || 1;
     const successCount = document.querySelectorAll('.m-img-btn.selected[alt="達成"]').length || 0;
 
