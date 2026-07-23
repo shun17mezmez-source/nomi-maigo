@@ -19,8 +19,8 @@
     <style>
         body {
             margin: 0;
-            font-family: "sicyubi-futofuder", sans-serif;
-            font-weight: 700;
+            font-family: "sicyubi-mohitsugyosho", sans-serif;
+            font-weight: 400;
             font-style: normal;
             background-image: url('BG.png'); 
             background-size: cover;
@@ -181,6 +181,9 @@
     opacity: 0; /* 最初は透明にしておく */
     transition: opacity 0.5s;
 }
+#result-screen {
+    opacity: 0;
+}
 /* タイトル画像のサイズと位置の調整 */
 .section-title-img {
     text-align: center;
@@ -334,7 +337,31 @@
 
 
 <script>
-    
+    // 共通フェード切り替え
+function fadeTransition(hideSelectors, showElement, callback = null) {
+
+    hideSelectors.forEach(sel => {
+        document.querySelectorAll(sel).forEach(el => {
+            el.classList.add("fade-out");
+        });
+    });
+
+    setTimeout(() => {
+
+        hideSelectors.forEach(sel => {
+            document.querySelectorAll(sel).forEach(el => {
+                el.style.display = "none";
+            });
+        });
+
+        if (callback) callback();
+
+        showElement.style.display = "block";
+        showElement.classList.remove("fade-out");
+        showElement.classList.add("fade-in");
+
+    }, 500);
+}
 // 1. お店を表示する関数
 let usedMissions = [];
 
@@ -380,43 +407,31 @@ function displayShops(data, currentRange) {
         `;
 
         // お店をクリックした時の処理
-        shopCard.onclick = () => {
+      shopCard.onclick = () => {
 
-    const selectors = ['header', '.container', '.maigo-fuda', '#button-container'];
+    const missionScreen = document.getElementById("mission-screen");
 
-    selectors.forEach(sel => {
-        document.querySelectorAll(sel).forEach(el => {
-            if (!document.getElementById('mission-screen').contains(el)) {
-                el.classList.add('fade-out');
-            }
-        });
-    });
+    fadeTransition(
+        [
+            "header",
+            ".container",
+            ".maigo-fuda",
+            "#button-container"
+        ],
+        missionScreen,
+        () => {
 
-    setTimeout(() => {
+            const selectedPlace = document.getElementById("selected-shop-card");
+            selectedPlace.innerHTML = "";
+            selectedPlace.appendChild(shopCard.cloneNode(true));
 
-        selectors.forEach(sel => {
-            document.querySelectorAll(sel).forEach(el => {
-                if (!document.getElementById('mission-screen').contains(el)) {
-                    el.style.display = 'none';
-                }
-            });
-        });
+            document.getElementById("mission-drink-hint").innerText =
+                document.getElementById("drink-hint").innerText
+                    .replace("一杯目は", "一杯目に") + " を頼め";
 
-        const selectedPlace = document.getElementById('selected-shop-card');
-        selectedPlace.innerHTML = '';
-        selectedPlace.appendChild(shopCard.cloneNode(true));
+        }
+    );
 
-        const hint = document.getElementById('drink-hint');
-        const missionDrinkHint = document.getElementById('mission-drink-hint');
-
-        missionDrinkHint.innerText =
-            hint.innerText.replace("一杯目は", "一杯目に") + " を頼め";
-
-        const missionScreen = document.getElementById('mission-screen');
-        missionScreen.style.display = 'block';
-        missionScreen.classList.add('fade-in');
-
-    }, 500);
 };
 
         shopList.appendChild(shopCard);
@@ -549,86 +564,101 @@ function selectResult(button, isSuccess) {
 
 // 5. リザルト画面を表示する関数
 function showResult() {
+
     // 達成と失敗の数を数える
     const totalMissions = document.querySelectorAll('.mission-unit').length;
     const successCount = document.querySelectorAll('.m-img-btn.selected[alt="達成"]').length;
-    
-    // 🌟 履歴（指令とはんこ）を生成
+
+    // 履歴を生成
     const missionsContainer = document.getElementById('result-missions-container');
-    if (missionsContainer) {
-        missionsContainer.innerHTML = ''; 
-        
-        document.querySelectorAll('.mission-unit').forEach(unit => {
-            const textElement = unit.querySelector('.order-hint') || unit.querySelector('h3') || unit.querySelector('p');
-            if (!textElement) return;
-            const missionText = textElement.innerText.trim();
+    missionsContainer.innerHTML = '';
 
-            const isSuccess = unit.querySelector('.m-img-btn.selected[alt="達成"]') !== null;
+    document.querySelectorAll('.mission-unit').forEach(unit => {
 
-            const item = document.createElement('div');
-            item.classList.add('result-mission-item');
+        const textElement =
+            unit.querySelector('.order-hint') ||
+            unit.querySelector('h3') ||
+            unit.querySelector('p');
 
-            if (isSuccess) {
-                item.innerHTML = `
-                    <img src="stamp.png" class="result-stamp" alt="達成">
-                    <span class="result-mission-text">${missionText}</span>
-                `;
-            } else {
-                item.classList.add('failed');
-                item.innerHTML = `
-                    <span class="result-mission-text">${missionText}</span>
-                `;
-            }
-            missionsContainer.appendChild(item);
-        });
-    }
+        if (!textElement) return;
 
-    // お店の名前を取得
-    const shopName = document.querySelector('#selected-shop-card .shop-desc')?.innerText || "居酒屋";
+        const missionText = textElement.innerText.trim();
 
-    // 結果サマリー（上部）
-    const resultSummary = document.getElementById('result-summary');
-    resultSummary.innerHTML = `
-        <p><strong>${shopName}</strong> <br>での呑みが終了しました！</p>
-        <p style="font-size: 1.5rem; color: #1a237e; font-weight: bold; margin-bottom: 0px;">
-            ミッション達成率: ${successCount} / ${totalMissions}
+        const isSuccess =
+            unit.querySelector('.m-img-btn.selected[alt="達成"]') !== null;
+
+        const item = document.createElement('div');
+        item.classList.add('result-mission-item');
+
+        if (isSuccess) {
+
+            item.innerHTML = `
+                <img src="stamp.png" class="result-stamp" alt="達成">
+                <span class="result-mission-text">${missionText}</span>
+            `;
+
+        } else {
+
+            item.classList.add('failed');
+
+            item.innerHTML = `
+                <span class="result-mission-text">${missionText}</span>
+            `;
+        }
+
+        missionsContainer.appendChild(item);
+
+    });
+
+    // お店名
+    const shopName =
+        document.querySelector('#selected-shop-card .shop-desc')?.innerText ||
+        "居酒屋";
+
+    // リザルト上部
+    document.getElementById('result-summary').innerHTML = `
+        <p><strong>${shopName}</strong><br>での呑みが終了しました！</p>
+
+        <p style="font-size:1.5rem;color:#1a237e;font-weight:bold;margin-bottom:0;">
+            ミッション達成率：${successCount} / ${totalMissions}
         </p>
     `;
 
-    // ====================== ここから追加 ======================
-    // ミッション一覧の下に表示するメッセージ（パーフェクトかで分岐）
-    const messageHTML = successCount === totalMissions 
-        ? `<p style="margin-top: 0px; font-size: 1.rem; text-align: center; line-height: 1.6;">
-            パーフェクト！<br>完璧な呑みっぷり！
-           </p>`
-        : `<p style="margin-top: 35px; font-size: 1.35rem; text-align: center; line-height: 1.6;">
-            お疲れ様！<br>もう一軒行こ！
-           </p>`;
+    // 前回のメッセージが残っていたら削除
+    document.querySelector('.result-message')?.remove();
 
-    missionsContainer.insertAdjacentHTML('afterend', messageHTML);
-    // ====================== ここまで ======================
-
-    // 途中画面を非表示
-    document.getElementById('first-mission-unit').style.display = 'none';
-    document.getElementById('dynamic-mission-container').style.display = 'none';
-    document.querySelector('.footer-btns').style.display = 'none';
-
-    // リザルト画面を表示
-    document.getElementById('result-screen').style.display = 'block';
-}
-function shareToX() {     // ← ここが shareToX になっているか確認
-    const totalMissions = document.querySelectorAll('.mission-unit').length || 1;
-    const successCount = document.querySelectorAll('.m-img-btn.selected[alt="達成"]').length || 0;
-
-    const text = encodeURIComponent(
-        `呑み迷子で新しい居酒屋を開拓中！\n` +
-        `今日のミッション達成率: ${successCount} / ${totalMissions}\n` +
-        `#呑み迷子`
+    // メッセージ追加
+    missionsContainer.insertAdjacentHTML(
+        'afterend',
+        `
+        <div class="result-message">
+            ${
+                successCount === totalMissions
+                ?
+                `<p style="margin-top:0;text-align:center;line-height:1.6;">
+                    パーフェクト！<br>
+                    完璧な呑みっぷり！
+                </p>`
+                :
+                `<p style="margin-top:35px;font-size:1.35rem;text-align:center;line-height:1.6;">
+                    お疲れ様！<br>
+                    もう一軒行こ！
+                </p>`
+            }
+        </div>
+        `
     );
 
-    const url = encodeURIComponent(window.location.href);
+    // フェード切り替え
+    fadeTransition(
+        [
+            '#first-mission-unit',
+            '#dynamic-mission-container',
+            '.footer-btns'
+        ],
+        document.getElementById('result-screen')
+    );
 
-    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
 }
 </script>
 
