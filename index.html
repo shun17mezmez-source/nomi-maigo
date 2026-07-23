@@ -649,12 +649,14 @@ function showResult() {
         `
     );
 
-    // フェード切り替え
+   // フェード切り替え
     fadeTransition(
         [
             '#first-mission-unit',
             '#dynamic-mission-container',
-            '.footer-btns'
+            '.footer-btns',
+            '#selected-shop-card', // 🌟 これを追加（お店のカードを非表示）
+            '.maigo-fuda'           // 🌟 もし「お店」の見出し画像・エリアも消したい場合はこれも追加
         ],
         document.getElementById('result-screen')
     );
