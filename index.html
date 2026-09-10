@@ -1703,6 +1703,23 @@ function displayShops(
         );
 
     });
+        const selectHint =
+        document.createElement("p");
+
+    selectHint.innerText =
+        "店を選択してスタート";
+
+    selectHint.style.cssText =
+        "font-family:sans-serif !important;"
+        + "font-size:14px;"
+        + "font-weight:normal;"
+        + "text-align:center;"
+        + "color:#666;"
+        + "margin:18px 0 0;";
+
+    shopList.appendChild(
+        selectHint
+    );
 
 }
 
