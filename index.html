@@ -784,26 +784,35 @@
         }
 
         @keyframes splashLogoIn {
+
             from {
                 opacity: 0;
                 transform: scale(0.85);
             }
+
             to {
                 opacity: 1;
                 transform: scale(1);
             }
         }
 
+
         #main-content {
+
             width: 100%;
+
             display: flex;
             flex-direction: column;
             align-items: center;
+
             opacity: 0;
+
             transition: opacity 0.5s ease;
         }
 
+
         #main-content.show {
+
             opacity: 1;
         }
 
@@ -817,23 +826,31 @@
         .result-message,
         .result-mission-item,
         .result-mission-text {
+
             font-family:
                 "ab-ootori",
                 sans-serif
                 !important;
 
             font-style: normal;
+
             font-weight: 400;
         }
 
-        /* 最初の画面「どこで呑む？」 */
+
+        /* ==========================================
+           最初の画面「どこで呑む？」
+        ========================================== */
+
         #shop-hint {
+
             font-family:
                 "ab-ootori",
                 sans-serif
                 !important;
 
             font-style: normal;
+
             font-weight: 400;
 
             font-size:
@@ -852,7 +869,8 @@
             margin: 10px 0 5px;
         }
 
-</style>
+
+    </style>
 
 
     <!-- PWA -->
@@ -900,11 +918,18 @@
 
 <!-- 起動時ロゴ -->
 <div id="splash-screen">
-    <img src="logo.png" alt="呑み迷子">
+
+    <img
+        src="logo.png"
+        alt="呑み迷子"
+    >
+
 </div>
+
 
 <!-- 通常画面 -->
 <div id="main-content">
+
 
 
 <!-- ==========================================
@@ -1106,9 +1131,6 @@
 
 
 </div>
-
-
-
 <!-- ==========================================
      トップ
 ========================================== -->
@@ -1132,9 +1154,14 @@
 
 
 
-<!-- 店舗候補 -->
+<!-- ==========================================
+     お店候補
+========================================== -->
 
-<div id="shop-container" class="container">
+<div
+    id="shop-container"
+    class="container"
+>
 
     <div class="section-title-img">
 
@@ -1145,9 +1172,14 @@
 
     </div>
 
-    <div id="shop-hint" class="order-hint">
+
+    <div
+        id="shop-hint"
+        class="order-hint"
+    >
         どこで呑む？
     </div>
+
 
     <div id="shop-list"></div>
 
@@ -1155,7 +1187,9 @@
 
 
 
-<!-- 最初の迷子札 -->
+<!-- ==========================================
+     最初の迷子札
+========================================== -->
 
 <div class="maigo-fuda">
 
@@ -1180,7 +1214,9 @@
 
 
 
-<!-- 探す -->
+<!-- ==========================================
+     探す
+========================================== -->
 
 <div
     id="button-container"
@@ -1205,49 +1241,56 @@
 
 <script>
 
+
 /* ==========================================
    起動スプラッシュ
 ========================================== */
 
 window.addEventListener("load", () => {
 
-    const splash = document.getElementById("splash-screen");
-    const main = document.getElementById("main-content");
+    const splash =
+        document.getElementById(
+            "splash-screen"
+        );
+
+    const main =
+        document.getElementById(
+            "main-content"
+        );
+
 
     /*
-      フォントの読み込み完了は待たない。
-      起動ロゴを約1秒だけ表示して、すぐ本画面へ切り替える。
+      フォント読み込み完了は待たない。
+
+      ロゴを約1秒表示したあと、
+      0.5秒かけてフェードアウト。
+
       Adobe Fontsは裏で読み込み続ける。
     */
+
     setTimeout(() => {
 
-        splash.classList.add("fade-out");
-        main.classList.add("show");
+        splash.classList.add(
+            "fade-out"
+        );
+
+        main.classList.add(
+            "show"
+        );
+
 
         setTimeout(() => {
-            splash.style.display = "none";
+
+            splash.style.display =
+                "none";
+
         }, 500);
+
 
     }, 1000);
 
 });
 
-const fontsReady = document.fonts
-        ? document.fonts.ready
-        : Promise.resolve();
-
-    Promise.all([minimumDisplay, fontsReady]).then(() => {
-
-        splash.classList.add("fade-out");
-        main.classList.add("show");
-
-        setTimeout(() => {
-            splash.style.display = "none";
-        }, 500);
-
-    });
-
-});
 
 
 /* ==========================================
@@ -1378,7 +1421,9 @@ function displayShops(
 
 
 
-    /* 一杯目 */
+    /* ==========================================
+       一杯目をランダム決定
+    ========================================== */
 
     if (hint) {
 
@@ -1407,6 +1452,10 @@ function displayShops(
 
 
 
+    /* ==========================================
+       店が見つからなかった場合
+    ========================================== */
+
     if (
         !data ||
         !data.results ||
@@ -1426,10 +1475,14 @@ function displayShops(
 
 
 
-    /* 検索距離 */
+    /* ==========================================
+       検索距離
+    ========================================== */
 
     const rangeText =
-        document.createElement('p');
+        document.createElement(
+            'p'
+        );
 
 
     rangeText.style.cssText =
@@ -1437,7 +1490,7 @@ function displayShops(
         "font-size:0.8rem;"
         + "color:#666;"
         + "text-align:center;"
-        + "font-family:serif;";
+        + "font-family:sans-serif;";
 
 
     rangeText.innerText =
@@ -1450,7 +1503,9 @@ function displayShops(
 
 
 
-    /* 3店舗 */
+    /* ==========================================
+       ランダムに3店舗表示
+    ========================================== */
 
     const shops =
 
@@ -1462,7 +1517,10 @@ function displayShops(
                 - Math.random()
         )
 
-        .slice(0, 3);
+        .slice(
+            0,
+            3
+        );
 
 
 
@@ -1546,6 +1604,10 @@ function displayShops(
 
 
 
+        /* ==========================================
+           お店を選択
+        ========================================== */
+
         shopCard.onclick = () => {
 
 
@@ -1556,6 +1618,14 @@ function displayShops(
                 );
 
 
+
+            /*
+              ★重要
+
+              #shop-container を丸ごと消すことで、
+              お店を選択したあとに
+              「お店候補」が画面下に残らない。
+            */
 
             fadeTransition(
 
@@ -1592,6 +1662,11 @@ function displayShops(
                     );
 
 
+
+                    /*
+                      最初に決定したお酒を
+                      ミッション画面へ引き継ぐ
+                    */
 
                     const firstDrink =
 
@@ -1719,6 +1794,10 @@ function getNextMission() {
 
 
 
+    /* ==========================================
+       使用済みを除外
+    ========================================== */
+
     let availableTasks =
 
         tasks.filter(
@@ -1731,6 +1810,10 @@ function getNextMission() {
         );
 
 
+
+    /*
+      全部使い切ったらリセット
+    */
 
     if (
         availableTasks.length === 0
@@ -1766,6 +1849,10 @@ function getNextMission() {
     );
 
 
+    /*
+      履歴は最大10個
+    */
+
     if (
         usedMissions.length > 10
     ) {
@@ -1775,6 +1862,10 @@ function getNextMission() {
     }
 
 
+
+    /* ==========================================
+       新しい迷子札
+    ========================================== */
 
     const newMission =
 
@@ -1795,6 +1886,10 @@ function getNextMission() {
 
 
 
+    /*
+      <br>を除いた文字数を取得
+    */
+
     const plainTask =
 
         randomTask.replace(
@@ -1802,6 +1897,11 @@ function getNextMission() {
             ""
         );
 
+
+
+    /*
+      長いミッションは少し小さく
+    */
 
     const textSizeClass =
 
@@ -1851,10 +1951,16 @@ function getNextMission() {
     `;
 
 
+
     container.appendChild(
         newMission
     );
 
+
+
+    /*
+      新しい迷子札までスクロール
+    */
 
     window.scrollTo({
 
@@ -1949,6 +2055,11 @@ async function fetchAndDisplay(
             || 0;
 
 
+
+        /*
+          3店舗未満なら
+          検索範囲を広げる
+        */
 
         if (
             shopCount < 3
@@ -2063,9 +2174,6 @@ function startGacha() {
         );
 
 }
-
-
-
 /* ==========================================
    達成・失敗選択
 ========================================== */
@@ -2075,24 +2183,18 @@ function selectResult(
     isSuccess
 ) {
 
-
     const parent =
-
         button.closest(
             '.mission-btns'
         );
 
-
     if (!parent) return;
 
 
-
     const buttons =
-
         parent.querySelectorAll(
             '.m-img-btn'
         );
-
 
 
     buttons.forEach(btn => {
@@ -2105,11 +2207,9 @@ function selectResult(
     });
 
 
-
     button.classList.add(
         'selected'
     );
-
 
 
     buttons.forEach(btn => {
@@ -2136,7 +2236,6 @@ function selectResult(
 
 function showResult() {
 
-
     const totalMissions =
 
         document.querySelectorAll(
@@ -2144,13 +2243,11 @@ function showResult() {
         ).length;
 
 
-
     const successCount =
 
         document.querySelectorAll(
             '.m-img-btn.selected[alt="達成"]'
         ).length;
-
 
 
     const missionsContainer =
@@ -2164,13 +2261,11 @@ function showResult() {
         '';
 
 
-
     document
         .querySelectorAll(
             '.mission-unit'
         )
         .forEach(unit => {
-
 
             const textElement =
 
@@ -2194,13 +2289,11 @@ function showResult() {
             if (!textElement) return;
 
 
-
             const missionText =
 
                 textElement
                 .innerText
                 .trim();
-
 
 
             const isSuccess =
@@ -2210,7 +2303,6 @@ function showResult() {
                 )
 
                 !== null;
-
 
 
             const item =
@@ -2225,9 +2317,7 @@ function showResult() {
             );
 
 
-
             if (isSuccess) {
-
 
                 item.innerHTML = `
 
@@ -2245,9 +2335,7 @@ function showResult() {
 
                 `;
 
-
             } else {
-
 
                 item.classList.add(
                     'failed'
@@ -2267,7 +2355,6 @@ function showResult() {
             }
 
 
-
             missionsContainer
                 .appendChild(
                     item
@@ -2276,9 +2363,8 @@ function showResult() {
         });
 
 
-
     /*
-     ★リザルトにお店名を表示しない
+      リザルトにはお店名を表示しない
     */
 
     document
@@ -2306,6 +2392,9 @@ function showResult() {
         `;
 
 
+    /*
+      前回のメッセージがあれば削除
+    */
 
     document
         .querySelector(
@@ -2314,6 +2403,9 @@ function showResult() {
         ?.remove();
 
 
+    /*
+      達成数に応じたメッセージ
+    */
 
     missionsContainer
         .insertAdjacentHTML(
@@ -2370,11 +2462,11 @@ function showResult() {
         );
 
 
-
     /*
-     ★お店関連だけを消す
+      ミッション画面を消して
+      リザルトを表示
 
-     result.pngは消さない
+      result.png は残す
     */
 
     fadeTransition(
@@ -2411,7 +2503,6 @@ function showResult() {
 
 function shareToX() {
 
-
     const totalMissions =
 
         document.querySelectorAll(
@@ -2419,13 +2510,11 @@ function shareToX() {
         ).length;
 
 
-
     const successCount =
 
         document.querySelectorAll(
             '.m-img-btn.selected[alt="達成"]'
         ).length;
-
 
 
     const text =
@@ -2437,11 +2526,9 @@ function shareToX() {
         `#呑み迷子`;
 
 
-
     const pageUrl =
 
         'https://nomi-maigo.pages.dev/';
-
 
 
     const shareUrl =
@@ -2453,7 +2540,6 @@ function shareToX() {
 
         + '&url='
         + encodeURIComponent(pageUrl);
-
 
 
     window.open(
