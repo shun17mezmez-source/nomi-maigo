@@ -279,7 +279,7 @@
 <body>
 
 <div id="mission-screen" class="container" style="display: none;">
-    <div class="section-title-img"><img src="shop.png" alt="お店"></div>
+    <div id="selected-shop-title" class="section-title-img"><img src="shop.png" alt="お店"></div>
     <div id="selected-shop-card"></div>
 
     <div id="first-mission-unit" class="mission-unit" style="margin-top:20px; border-top:1px dashed #ccc; padding-top:20px;">
@@ -610,15 +610,8 @@ function showResult() {
 
     });
 
-    // お店名
-    const shopName =
-        document.querySelector('#selected-shop-card .shop-desc')?.innerText ||
-        "居酒屋";
-
-    // リザルト上部
+    // リザルト上部（お店情報は表示しない）
     document.getElementById('result-summary').innerHTML = `
-        <p><strong>${shopName}</strong><br>での呑みが終了しました！</p>
-
         <p style="font-size:1.5rem;color:#1a237e;font-weight:bold;margin-bottom:0;">
             ミッション達成率：${successCount} / ${totalMissions}
         </p>
@@ -656,14 +649,24 @@ function showResult() {
             '#dynamic-mission-container',
             '.footer-btns',
             '#selected-shop-card',
-            '.section-title-img', // 🌟 追加：タイトル画像（お店などの画像）
-            '#shop-list',          // 🌟 追加：お店エリア全体
-            'hr'                   // 🌟 追加：もし破線が <hr> タグならこれ
+            '#selected-shop-title' // お店タイトルだけ非表示
         ],
         document.getElementById('result-screen')
     );
 
 }
+// 6. Xに結果を投稿する
+function shareToX() {
+    const totalMissions = document.querySelectorAll('.mission-unit').length;
+    const successCount = document.querySelectorAll('.m-img-btn.selected[alt="達成"]').length;
+
+    const text = `呑み迷子で遊びました！\nミッション達成率：${successCount} / ${totalMissions}\n\n#呑み迷子`;
+    const siteUrl = 'https://nomi-maigo.pages.dev/';
+    const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(siteUrl)}`;
+
+    window.open(shareUrl, '_blank', 'noopener,noreferrer');
+}
+
 </script>
 
 <footer style="text-align: center; margin-top: 50px; margin-bottom: 20px; font-family: sans-serif; font-size: 0.8rem; color: #666;">
