@@ -1752,6 +1752,21 @@ function displayShops(
 
 function getNextMission() {
 
+    const missionUnits =
+        document.querySelectorAll('.mission-unit');
+
+    const lastMission =
+        missionUnits[missionUnits.length - 1];
+
+    // 達成・失敗のどちらも選ばれていなければ次へ進ませない
+    if (
+    lastMission &&
+    !lastMission.querySelector('.m-img-btn.selected')
+) {
+    alert("達成か失敗を選択してください");
+    return;
+}
+
 
     const container =
 
