@@ -869,6 +869,21 @@
             margin: 10px 0 5px;
         }
 
+        /* 店舗表示後の余白調整 */
+        #shop-container {
+            padding-top: 12px;
+            padding-bottom: 10px;
+        }
+
+        #shop-list {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        #shop-list > p:last-child {
+            margin-top: 10px !important;
+            margin-bottom: 0 !important;
+        }
 
     </style>
 
@@ -1389,6 +1404,12 @@ function displayShops(
             'drink-hint'
         );
 
+    const shopHint =
+        document.getElementById("shop-hint");
+
+    if (shopHint) {
+        shopHint.style.display = "none";
+}
 
     const drinks = [
 
@@ -1715,7 +1736,7 @@ function displayShops(
         + "font-weight:normal;"
         + "text-align:center;"
         + "color:#666;"
-        + "margin:18px 0 0;";
+        + "margin:10px 0 0;";
 
     shopList.appendChild(
         selectHint
