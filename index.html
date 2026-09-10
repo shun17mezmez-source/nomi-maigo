@@ -11,10 +11,8 @@
 
     <title>呑み迷子 - NOMI-MAIGO</title>
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&display=swap"
-        rel="stylesheet"
-    >
+    <link rel="preconnect" href="https://use.typekit.net" crossorigin>
+    <link rel="preconnect" href="https://p.typekit.net" crossorigin>
 
     <!-- Adobe Fonts -->
     <script>
@@ -671,7 +669,8 @@
             }
 
 
-            #drink-hint {
+            #drink-hint,
+            #shop-hint {
 
                 font-size:
                     clamp(
@@ -728,7 +727,8 @@
 
         @media screen and (max-width: 360px) {
 
-            #drink-hint {
+            #drink-hint,
+            #shop-hint {
 
                 font-size:
                     clamp(
@@ -835,12 +835,24 @@
 
             font-style: normal;
             font-weight: 400;
-            font-size: 30px;
-            margin: 10px 0 5px;
+
+            font-size:
+                clamp(22px, 7.5vw, 34px);
+
             white-space: nowrap;
+
+            width: 100%;
+
+            overflow: visible;
+
+            text-align: center;
+
+            letter-spacing: -0.02em;
+
+            margin: 10px 0 5px;
         }
 
-    </style>
+</style>
 
 
     <!-- PWA -->
@@ -1202,14 +1214,25 @@ window.addEventListener("load", () => {
     const splash = document.getElementById("splash-screen");
     const main = document.getElementById("main-content");
 
-    // ロゴは最低1秒表示。
-    // Adobe Fonts等のフォント読み込みが1秒以上かかった場合は、
-    // 読み込み完了までスプラッシュを残す。
-    const minimumDisplay = new Promise(resolve => {
-        setTimeout(resolve, 1000);
-    });
+    /*
+      フォントの読み込み完了は待たない。
+      起動ロゴを約1秒だけ表示して、すぐ本画面へ切り替える。
+      Adobe Fontsは裏で読み込み続ける。
+    */
+    setTimeout(() => {
 
-    const fontsReady = document.fonts
+        splash.classList.add("fade-out");
+        main.classList.add("show");
+
+        setTimeout(() => {
+            splash.style.display = "none";
+        }, 500);
+
+    }, 1000);
+
+});
+
+const fontsReady = document.fonts
         ? document.fonts.ready
         : Promise.resolve();
 
