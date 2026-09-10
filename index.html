@@ -1,676 +1,2352 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>呑み迷子 - NOMI-MAIGO</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&display=swap" rel="stylesheet">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Adobe Fonts -->
     <script>
-    (function(d) {
-        var config = {
-            kitId: 'gpu6rtb',
-            scriptTimeout: 3000,
-            async: true
-        },
-        h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
-    })(document);
+        (function(d) {
+
+            var config = {
+                kitId: 'gpu6rtb',
+                scriptTimeout: 3000,
+                async: true
+            },
+
+            h = d.documentElement,
+
+            t = setTimeout(function() {
+
+                h.className =
+                    h.className.replace(/\bwf-loading\b/g, "")
+                    + " wf-inactive";
+
+            }, config.scriptTimeout),
+
+            tk = d.createElement("script"),
+            f = false,
+            s = d.getElementsByTagName("script")[0],
+            a;
+
+            h.className += " wf-loading";
+
+            tk.src =
+                'https://use.typekit.net/'
+                + config.kitId
+                + '.js';
+
+            tk.async = true;
+
+            tk.onload =
+            tk.onreadystatechange =
+            function() {
+
+                a = this.readyState;
+
+                if (
+                    f ||
+                    a &&
+                    a != "complete" &&
+                    a != "loaded"
+                ) return;
+
+                f = true;
+
+                clearTimeout(t);
+
+                try {
+                    Typekit.load(config);
+                } catch(e) {}
+
+            };
+
+            s.parentNode.insertBefore(tk, s);
+
+        })(document);
     </script>
 
+
     <style>
+
+        /* ==========================================
+           全体
+        ========================================== */
+
         body {
+
             margin: 0;
-            font-family: "sicyubi-mohitsugyosho", sans-serif;
+
+            font-family:
+                "sicyubi-mohitsugyosho",
+                sans-serif;
+
             font-weight: 400;
             font-style: normal;
-            background-image: url('BG.png'); 
+
+            background-image: url('BG.png');
             background-size: cover;
             background-attachment: fixed;
             background-position: center;
+
             display: flex;
             flex-direction: column;
             align-items: center;
+
             min-height: 100vh;
         }
-       .container, .maigo-fuda {
-            background-color: rgba(255, 255, 255, 0.6) !important;
+
+
+        .container,
+        .maigo-fuda {
+
+            background-color:
+                rgba(255, 255, 255, 0.6)
+                !important;
+
             border-radius: 15px;
-            font-family: "sicyubi-futofuder", sans-serif !important; 
+
+            font-family:
+                "sicyubi-futofuder",
+                sans-serif
+                !important;
         }
 
-        h2, h3 {
-            text-align: center;
-            margin-top: -5px !important;    /* ➔ 上の「お店候補」画像との隙間を狭くする */
-            margin-bottom: -5px !important; /* ➔ 下の「お店の枠」との隙間を狭くする */
+
+        .container,
+        .maigo-fuda {
+
+            width: 92%;
+            max-width: 400px;
+
+            margin: 20px auto;
+
+            padding: 20px;
+
+            box-shadow:
+                0 4px 15px
+                rgba(0,0,0,0.05);
+
+            box-sizing: border-box;
         }
+
+
+        header {
+
+            width: 100%;
+
+            padding: 30px 0 10px;
+
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        h2,
+        h3 {
+
+            text-align: center;
+
+            margin-top: -5px !important;
+            margin-bottom: -5px !important;
+        }
+
+
+
+        /* ==========================================
+           タイトル画像
+        ========================================== */
+
+        .section-title-img {
+
+            text-align: center;
+
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+
+        .section-title-img img {
+
+            max-width: 140px;
+
+            height: auto;
+
+            display: inline-block;
+        }
+
+
+
+        /* ==========================================
+           迷子札
+        ========================================== */
 
         .order-hint {
-            font-family: "sicyubi-futofuder", sans-serif;
-            font-size: 34px;
+
+            font-family:
+                "ab-ootori",
+                sans-serif
+                !important;
+
+            font-style: normal;
+
             font-weight: 400;
-            margin: 10px 0 10px;
+
+            font-size: 34px;
+
+            margin: 10px 0;
+
             text-align: center;
         }
 
-        #mission-screen .order-hint {
-            font-size: 20px; 
-            margin: 10px 0 10px;
+
+        /*
+         一杯目の迷子札
+
+         white-space: nowrap
+         → スマホでも途中改行しない
+
+         clamp
+         → 画面が狭い時だけ文字を少し小さくする
+        */
+
+        #drink-hint {
+
+            font-family:
+                "ab-ootori",
+                sans-serif
+                !important;
+
+            font-size:
+                clamp(22px, 7.5vw, 34px);
+
             white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+
+            width: 100%;
+
+            overflow: visible;
+
+            text-align: center;
+
+            letter-spacing: -0.02em;
         }
 
-        .mission-unit {/* 迷子札 */
-            margin-bottom: 12px ;
+
+        /*
+         お店を選択した後の
+         「一杯目に○○を頼め」
+        */
+
+        #mission-drink-hint {
+
+            font-family:
+                "ab-ootori",
+                sans-serif
+                !important;
+
+            font-size:
+                clamp(16px, 5vw, 20px)
+                !important;
+
+            white-space: nowrap;
+
+            overflow: visible;
+
+            text-overflow: clip;
+
+            width: 100%;
+
+            box-sizing: border-box;
+
+            letter-spacing: -0.03em;
+
+            margin: 10px 0;
+        }
+
+
+        /*
+         通常の追加ミッション
+        */
+
+        .mission-unit .order-hint {
+
+            font-family:
+                "ab-ootori",
+                sans-serif
+                !important;
+
+            font-size:
+                clamp(17px, 5vw, 20px);
+
+            line-height: 1.4;
+
+            overflow-wrap: normal;
+
+            word-break: keep-all;
+        }
+
+
+        .mission-unit {
+
+            margin-bottom: 12px;
+
             padding-top: 5px;
-            padding-bottom: 8px ;
-            font-size: 20px; /* ➔ ここを追加！文字を大きくします（24px〜28pxあたりがおすすめ） */
-            text-align: center; /* ➔ もし真ん中寄せにしたい場合はこれも入れておくと安心です */
-}
-        .mission-btns {/* 迷子札    ボタン間隔*/
-            display: flex;
-            justify-content: space-around;
-            gap: 12px;
-            margin-top: 8px !important;      /* 文字とボタンの間の余白 */
-            margin-bottom: 2px !important;  /* 下の区切り線や次のミッションまでの余白 */
-}
-        
+            padding-bottom: 8px;
 
-        /* 画像ボタンのスタイル （達成・失敗）*/
-        .m-img-btn {
-            height: 40px;          /* ➔ 下のボタンと同じ「45px」に指定して高さを揃える！ */
-            width: auto;           /* ➔ 横幅は比率に合わせて自動調整 */
-            cursor: pointer;
-            transition: transform 0.1s;
+            font-size: 20px;
+
+            text-align: center;
         }
-.m-img-btn:active {
-    transform: scale(0.95); /* 押した時に少し凹む演出 */
-}
+
+
+        .mission-btns {
+
+            display: flex;
+
+            justify-content: space-around;
+
+            gap: 12px;
+
+            margin-top: 8px !important;
+            margin-bottom: 2px !important;
+        }
+
+
+
+        /* ==========================================
+           達成・失敗
+        ========================================== */
+
+        .m-img-btn {
+
+            height: 40px;
+
+            width: auto;
+
+            cursor: pointer;
+
+            transition:
+                transform 0.1s,
+                opacity 0.1s;
+        }
+
+
+        .m-img-btn:active {
+
+            transform: scale(0.95);
+        }
+
+
+        .m-img-btn.selected {
+
+            transform: scale(1.2);
+
+            opacity: 1;
+        }
+
+
+        .m-img-btn.dimmed {
+
+            transform: scale(1);
+
+            opacity: 0.3;
+        }
+
+
+
+        /* ==========================================
+           下部ボタン
+        ========================================== */
 
         .f-img-btn {
-            width: auto; /* 下部ボタンの横幅 */
+
+            width: auto;
+
             height: 45px;
+
             cursor: pointer;
         }
 
+
         .footer-btns {
-             display: flex;
-             flex-direction: column-reverse; /* ➔ 縦並びにして、上下をひっくり返す（店を出るが下になる） */
-                align-items: center;            /* ➔ ボタンを真ん中に寄せる */
-                gap: 10px;                      /* ➔ ボタンとボタンの間のスキマ */
-                margin-top: 15px;
-                width: 100%;
-        }
 
-/* 選択されたボタン（大きく表示） */
-.m-img-btn.selected {
-    transform: scale(1.2); /* 1.1倍に拡大 */
-    opacity: 1;
-}
-
-/* 選択しなかったボタン（暗く表示） */
-.m-img-btn.dimmed {
-    transform: scale(1); 
-    opacity: 0.3; /* 暗くする */
-}
-
-        /* 以下、既存のレイアウト維持用CSS */
-        header { width: 100%; padding: 30px 0 10px; display: flex; justify-content: center; align-items: center; }
-        .container, .maigo-fuda { width: 92%; max-width: 400px; margin: 20px auto; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); box-sizing: border-box; }
-     /* 通常のタイトル（ミッション画面の文字など）の間隔を元に戻す */
-.section-title {
-    text-align: center;
-    margin-top: 10px !important;    /* ➔ ここをプラスの数値に戻してボタンとの重なりを解消！ */
-    margin-bottom: 10px !important; /* ➔ 文字の下側にも適度な隙間を作る */
-    font-size: 1.2rem;
-}
-
-#result-screen .section-title {
-    margin-top: -32px !important;   /* ➔ お店候補画面のときだけこのマイナスを効かせる */
-    margin-bottom: 2px !important;
-}
-        .shop-card {
             display: flex;
+
+            flex-direction: column-reverse;
+
             align-items: center;
-            background: #fff;
-            border: 2.5px solid rgba(26, 35, 126, 0.5) !important; /* 店情報　枠 */
-}
-       /* お店情報専用のフォント・サイズ設定 */
-        .shop-card {
-            height: 100px; /* ➔ カード全体の高さを統一（画像が収まる丁度いい高さ） */
+
+            gap: 10px;
+
+            margin-top: 15px;
+
+            width: 100%;
         }
 
-        .shop-card, .shop-card * {
-            font-family: sans-serif !important;
+
+
+        /* ==========================================
+           店舗カード
+        ========================================== */
+
+        .shop-card {
+
+            display: flex;
+
+            align-items: center;
+
+            background: #fff;
+
+            border:
+                2.5px solid
+                rgba(26, 35, 126, 0.5)
+                !important;
+
+            height: 100px;
+        }
+
+
+        .shop-card,
+        .shop-card * {
+
+            font-family:
+                sans-serif
+                !important;
+
             font-weight: normal;
         }
-        .shop-card p, 
-        .shop-card div:not(.shop-name) { 
-            font-size: 0.75rem !important; /* ➔ 文字サイズを少し小さめに（標準は1rem） */
-            line-height: 1.3;              /* ➔ 行の間隔を少し詰めてスッキリさせる */
-            margin: 3px 0;                 /* ➔ 文字上下の隙間を狭くする */
+
+
+        .shop-card p,
+        .shop-card div:not(.shop-name) {
+
+            font-size:
+                0.75rem
+                !important;
+
+            line-height: 1.3;
+
+            margin: 3px 0;
         }
-.result-text {
-    color: #444444;   
-    font-family: sans-serif !important;
-    font-weight: normal !important;
-}
-/* フェードアウト用のクラス */
-.fade-out {
-    animation: fadeOut 0.5s ease-out forwards;
-}
 
-/* フェードイン用のクラス */
-.fade-in {
-    animation: fadeIn 0.5s ease-in forwards;
-}
 
-/* フェードアウトのアニメーション */
-@keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
-}
 
-/* フェードインのアニメーション */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; opacity: 1; }
-}
+        /* ==========================================
+           フェード
+        ========================================== */
 
-/* ミッション画面の初期状態を非表示にするための調整 */
-#mission-screen {
-    opacity: 0; /* 最初は透明にしておく */
-    transition: opacity 0.5s;
-}
-#result-screen {
-    opacity: 0;
-}
-/* タイトル画像のサイズと位置の調整 */
-.section-title-img {
-    text-align: center;
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-.section-title-img img {
-    max-width: 140px; /* ➔ 画像が大きすぎる場合は、この数字（200）を小さくして調整してください */
-    height: auto;
-    display: inline-block;
-}
-/* リザルト画面の画像ボタン用スタイル */
-.result-btns {
-    display: flex;
-    flex-direction: column; /* ボタンを縦に並べる */
-    align-items: center;
-    gap: 12px;             /* ボタンとボタンの間のすき間 */
-    margin-top: 15px;
-}
-.res-img-btn {
-    height: 45px;          /* ➔ まず2つのボタンの「縦幅」を共通のサイズで固定します！ */
-    width: auto;           /* ➔ 横幅は画像の比率を崩さずに自動調整させます */
-    cursor: pointer;
-    transition: transform 0.1s;
-}
-.res-img-btn:active {
-    transform: scale(0.95);
-}
-/* ==========================================
-   リザルト画面：指令履歴のスタイル
-========================================== */
+        .fade-out {
 
-/* 履歴全体のコンテナ */
-#result-missions-container {
-    margin: 20px auto;
-    max-width: 320px;       /* ➔ 画面中央に綺麗に収まる横幅 */
-    text-align: left;       /* ➔ はんこと文字を左揃えにする */
-    padding: 0 15px 0 15px;    
-    display: flex;
-    flex-direction: column;
-    gap: 10px;              /* ➔ 指令ごとの上下の間隔 */
-}
+            animation:
+                fadeOut
+                0.5s
+                ease-out
+                forwards;
+        }
 
-/* 各指令の行 */
-.result-mission-item {
-    display: flex;
-    align-items: center;    /* ➔ はんこと文字の上下中央を揃える */
-    font-family: "sicyubi-futofuder", sans-serif; /* ➔ 筆文字フォント */
-    font-size: 16px;
-    font-weight: bold;
-    color: #000;
-    min-height: 36px;       /* ➔ 行の最低の高さを揃えてガタつき防止 */
-    margin-bottom: 2px;  
-}
 
-/* 最後の指令だけ下余白をなくす */
-.result-mission-item:last-child {
-    margin-bottom: 0 !important;
-}
+        .fade-in {
 
-/* 達成はんこ（stamp.png） */
-.result-stamp {
-    height: 36px;           /* ➔ 文字の大きさに合わせたサイズ */
-    width: auto;
-    margin-right: 12px;     /* ➔ はんこと文字の間の隙間 */
-    flex-shrink: 0;         /* ➔ 画像が横に潰れるのを防ぐ */
-}
+            animation:
+                fadeIn
+                0.5s
+                ease-in
+                forwards;
+        }
 
-/* ❌ 失敗したミッション */
-.result-mission-item.failed {
-    opacity: 0.25;          /* ➔ 不透明度を下げて薄く（グレーアウト）する */
-    /* 🔥 はんこが無い分、文字の開始位置を右にずらして、成功した行と頭を揃える */
-    padding-left: 44px;     /* 「はんこの高さ(32px) + 隙間(12px)」と同じ数値 */
-}
-/* 文字数が長いのときに適用する小さめフォント */
-.small-text {
-    font-size: 0.9998rem !important; /* 通常より一回り小さくする */
-}
+
+        @keyframes fadeOut {
+
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+
+
+        @keyframes fadeIn {
+
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+
+        #mission-screen {
+
+            opacity: 0;
+
+            transition: opacity 0.5s;
+        }
+
+
+        #result-screen {
+
+            opacity: 0;
+        }
+
+
+
+        /* ==========================================
+           リザルト
+        ========================================== */
+
+        .result-text {
+
+            color: #444;
+
+            font-family:
+                sans-serif
+                !important;
+
+            font-weight:
+                normal
+                !important;
+        }
+
+
+        /*
+         ★破線を完全削除
+        */
+
+        #result-screen {
+
+            border: none !important;
+
+            margin-top: 0 !important;
+
+            padding-top: 5px !important;
+        }
+
+
+        .result-btns {
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin-top: 15px;
+        }
+
+
+        .res-img-btn {
+
+            height: 45px;
+
+            width: auto;
+
+            cursor: pointer;
+
+            transition:
+                transform 0.1s;
+        }
+
+
+        .res-img-btn:active {
+
+            transform: scale(0.95);
+        }
+
+
+
+        /* ==========================================
+           リザルト：指令履歴
+        ========================================== */
+
+        #result-missions-container {
+
+            margin: 20px auto;
+
+            max-width: 320px;
+
+            text-align: left;
+
+            padding:
+                0 15px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 10px;
+        }
+
+
+        .result-mission-item {
+
+            display: flex;
+
+            align-items: center;
+
+            font-family:
+                "ab-ootori",
+                sans-serif;
+
+            font-size: 16px;
+
+            font-weight: 400;
+
+            color: #000;
+
+            min-height: 36px;
+
+            margin-bottom: 2px;
+        }
+
+
+        .result-mission-item:last-child {
+
+            margin-bottom:
+                0 !important;
+        }
+
+
+        .result-stamp {
+
+            height: 36px;
+
+            width: auto;
+
+            margin-right: 12px;
+
+            flex-shrink: 0;
+        }
+
+
+        .result-mission-item.failed {
+
+            opacity: 0.25;
+
+            padding-left: 48px;
+        }
+
+
+        .small-text {
+
+            font-size:
+                0.9998rem
+                !important;
+        }
+
+
+
+        /* ==========================================
+           スマホ調整
+        ========================================== */
+
+        @media screen and (max-width: 480px) {
+
+            .container,
+            .maigo-fuda {
+
+                width: 92%;
+
+                padding-left: 14px;
+                padding-right: 14px;
+            }
+
+
+            #drink-hint {
+
+                font-size:
+                    clamp(
+                        20px,
+                        7vw,
+                        30px
+                    );
+
+                white-space: nowrap;
+
+                letter-spacing:
+                    -0.04em;
+            }
+
+
+            #mission-drink-hint {
+
+                font-size:
+                    clamp(
+                        15px,
+                        4.7vw,
+                        19px
+                    )
+                    !important;
+
+                white-space: nowrap;
+
+                letter-spacing:
+                    -0.05em;
+            }
+
+
+            .mission-unit .order-hint {
+
+                font-size:
+                    clamp(
+                        16px,
+                        4.8vw,
+                        19px
+                    );
+            }
+
+
+            .result-mission-item {
+
+                font-size: 15px;
+            }
+        }
+
+
+        /*
+         かなり幅の狭いスマホ
+        */
+
+        @media screen and (max-width: 360px) {
+
+            #drink-hint {
+
+                font-size:
+                    clamp(
+                        18px,
+                        6.5vw,
+                        25px
+                    );
+            }
+
+
+            #mission-drink-hint {
+
+                font-size:
+                    15px
+                    !important;
+
+                letter-spacing:
+                    -0.07em;
+            }
+        }
+
     </style>
-<!-- PWA ホーム画面アイコン設定 -->
-<link rel="manifest" href="manifest.json">
 
-<!-- iOS用 -->
-<link rel="apple-touch-icon" href="icon-180.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="呑み迷子">
 
-<!-- その他 -->
-<meta name="theme-color" content="#1a237e">
+    <!-- PWA -->
+
+    <link
+        rel="manifest"
+        href="manifest.json"
+    >
+
+
+    <link
+        rel="apple-touch-icon"
+        href="icon-180.png"
+    >
+
+
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
+
+
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="default"
+    >
+
+
+    <meta
+        name="apple-mobile-web-app-title"
+        content="呑み迷子"
+    >
+
+
+    <meta
+        name="theme-color"
+        content="#1a237e"
+    >
+
 </head>
+
+
 
 <body>
 
-<div id="mission-screen" class="container" style="display: none;">
-    <div id="selected-shop-title" class="section-title-img"><img src="shop.png" alt="お店"></div>
-    <div id="selected-shop-card"></div>
 
-    <div id="first-mission-unit" class="mission-unit" style="margin-top:20px; border-top:1px dashed #ccc; padding-top:20px;">
-    <div class="section-title-img"><img src="plate.png" alt="迷子札"></div>
-    <div id="mission-drink-hint" class="order-hint"></div>
-    <div class="mission-btns">
-    <img src="fail.png" class="m-img-btn" onclick="selectResult(this, false)" alt="失敗">
-    <img src="achievement.png" class="m-img-btn" onclick="selectResult(this, true)" alt="達成">
-</div>
-</div>
+<!-- ==========================================
+     ミッション画面
+========================================== -->
 
-    <div id="dynamic-mission-container"></div>
+<div
+    id="mission-screen"
+    class="container"
+    style="display:none;"
+>
+
+
+    <!-- 選んだお店 -->
+
+    <div
+        id="mission-shop-title"
+        class="section-title-img"
+    >
+
+        <img
+            src="shop.png"
+            alt="お店"
+        >
+
+    </div>
+
+
+    <div
+        id="selected-shop-card"
+    ></div>
+
+
+
+    <!-- 最初の迷子札 -->
+
+    <div
+        id="first-mission-unit"
+        class="mission-unit"
+        style="
+            margin-top:20px;
+            border-top:1px dashed #ccc;
+            padding-top:20px;
+        "
+    >
+
+
+        <div
+            id="mission-plate-title"
+            class="section-title-img"
+        >
+
+            <img
+                src="plate.png"
+                alt="迷子札"
+            >
+
+        </div>
+
+
+        <div
+            id="mission-drink-hint"
+            class="order-hint"
+        ></div>
+
+
+        <div class="mission-btns">
+
+
+            <img
+                src="fail.png"
+                class="m-img-btn"
+                onclick="selectResult(this, false)"
+                alt="失敗"
+            >
+
+
+            <img
+                src="achievement.png"
+                class="m-img-btn"
+                onclick="selectResult(this, true)"
+                alt="達成"
+            >
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- 追加迷子札 -->
+
+    <div
+        id="dynamic-mission-container"
+    ></div>
+
+
+
+    <!-- 操作ボタン -->
 
     <div class="footer-btns">
-        <img src="exit.png" class="f-img-btn" onclick="showResult()" alt="店を出る">
-        <img src="next.png" class="f-img-btn" onclick="getNextMission()" alt="次の迷子札">
+
+
+        <img
+            src="exit.png"
+            class="f-img-btn"
+            onclick="showResult()"
+            alt="店を出る"
+        >
+
+
+        <img
+            src="next.png"
+            class="f-img-btn"
+            onclick="getNextMission()"
+            alt="次の迷子札"
+        >
+
+
     </div>
-    <!-- ⬇️ ここからリザルト画面（最初は非表示） ⬇️ -->
-    <div id="result-screen" style="display: none; text-align: center; margin-top: 20px; border-top: 2px dashed #1a237e; padding-top: 20px;">
-        <div class="section-title-img"><img src="result.png" alt="リザルト"></div>
-        <div id="result-summary" style="font-size: 1.2rem; margin-bottom: 20px;"></div>
-        <div id="result-missions-container"></div>
+
+
+
+    <!-- ==========================================
+         リザルト
+    ========================================== -->
+
+    <div
+        id="result-screen"
+        style="
+            display:none;
+            text-align:center;
+        "
+    >
+
+
+        <div class="section-title-img">
+
+            <img
+                src="result.png"
+                alt="リザルト"
+            >
+
+        </div>
+
+
+        <div
+            id="result-summary"
+            style="
+                font-size:1.2rem;
+                margin-bottom:20px;
+            "
+        ></div>
+
+
+        <div
+            id="result-missions-container"
+        ></div>
+
+
 
         <div class="result-btns">
-    <!-- もう一度迷子になるボタン -->
-    <img src="more.png" class="res-img-btn" onclick="location.reload()" alt="もう一度迷子になる">
-    
-    <!-- ポストするボタン -->
-    <img src="post.png" class="res-img-btn" onclick="shareToX()" alt="Xポスト">
-    <img src="logo.png" style="width: 100px; height: auto; margin-top: 20px; display: block; margin-left: auto; margin-right: auto;">
-</div>
+
+
+            <img
+                src="more.png"
+                class="res-img-btn"
+                onclick="location.reload()"
+                alt="もう一度迷子になる"
+            >
+
+
+            <img
+                src="post.png"
+                class="res-img-btn"
+                onclick="shareToX()"
+                alt="Xポスト"
+            >
+
+
+            <img
+                src="logo.png"
+                style="
+                    width:100px;
+                    height:auto;
+                    margin-top:20px;
+                    display:block;
+                    margin-left:auto;
+                    margin-right:auto;
+                "
+                alt="呑み迷子"
+            >
+
+
+        </div>
+
     </div>
 
+
 </div>
+
+
+
+<!-- ==========================================
+     トップ
+========================================== -->
 
 <header>
+
     <div class="logo-area">
-        <img src="logo.png" alt="呑み迷子" style="width: 150px; height: auto;">
+
+        <img
+            src="logo.png"
+            alt="呑み迷子"
+            style="
+                width:150px;
+                height:auto;
+            "
+        >
+
     </div>
+
 </header>
 
+
+
+<!-- 店舗候補 -->
+
 <div class="container">
-    <div class="section-title-img"><img src="shoplist.png" alt="お店候補"></div>
-    <div id="shop-list"></div> 
+
+    <div class="section-title-img">
+
+        <img
+            src="shoplist.png"
+            alt="お店候補"
+        >
+
+    </div>
+
+
+    <div id="shop-list"></div>
+
 </div>
+
+
+
+<!-- 最初の迷子札 -->
 
 <div class="maigo-fuda">
-    <div class="section-title-img"><img src="plate.png" alt="迷子札"></div>
-    <div id="drink-hint" class="order-hint">一杯目、何飲む？</div>
+
+    <div class="section-title-img">
+
+        <img
+            src="plate.png"
+            alt="迷子札"
+        >
+
+    </div>
+
+
+    <div
+        id="drink-hint"
+        class="order-hint"
+    >
+        一杯目、何飲む？
+    </div>
+
 </div>
 
-<div id="button-container" style="text-align: center;">
-    <img id="action-button" src="search.png" onclick="startGacha()" style="cursor: pointer; width: 300px; max-width: 80%;">
+
+
+<!-- 探す -->
+
+<div
+    id="button-container"
+    style="text-align:center;"
+>
+
+    <img
+        id="action-button"
+        src="search.png"
+        onclick="startGacha()"
+        style="
+            cursor:pointer;
+            width:300px;
+            max-width:80%;
+        "
+        alt="お店を探す"
+    >
+
 </div>
+
 
 
 <script>
-    // 共通フェード切り替え
-function fadeTransition(hideSelectors, showElement, callback = null) {
+
+
+/* ==========================================
+   共通フェード
+========================================== */
+
+function fadeTransition(
+    hideSelectors,
+    showElement,
+    callback = null
+) {
 
     hideSelectors.forEach(sel => {
-        document.querySelectorAll(sel).forEach(el => {
-            el.classList.add("fade-out");
-        });
+
+        document
+            .querySelectorAll(sel)
+            .forEach(el => {
+
+                el.classList.add(
+                    "fade-out"
+                );
+
+            });
+
     });
+
 
     setTimeout(() => {
 
         hideSelectors.forEach(sel => {
-            document.querySelectorAll(sel).forEach(el => {
-                el.style.display = "none";
-            });
+
+            document
+                .querySelectorAll(sel)
+                .forEach(el => {
+
+                    el.style.display =
+                        "none";
+
+                });
+
         });
 
-        if (callback) callback();
 
-        showElement.style.display = "block";
-        showElement.classList.remove("fade-out");
-        showElement.classList.add("fade-in");
+        if (callback) {
+
+            callback();
+
+        }
+
+
+        showElement.style.display =
+            "block";
+
+
+        showElement.classList.remove(
+            "fade-out"
+        );
+
+
+        showElement.classList.add(
+            "fade-in"
+        );
+
 
     }, 500);
+
 }
-// 1. お店を表示する関数
+
+
+
+/* ==========================================
+   使用済みミッション
+========================================== */
+
 let usedMissions = [];
 
-function displayShops(data, currentRange) {
-    const shopList = document.getElementById('shop-list');
-    const hint = document.getElementById('drink-hint');
-    const drinks = ["生ビール", "生ビール","生ビール","生ビール","生ビール","生ビール","ハイボール","ハイボール", "ハイボール", "レモンサワー","レモンサワー","レモンサワー", "日本酒", "焼酎", "ウーロンハイ", "カシオレ", "トマトハイ"];
 
-    // 迷子札の内容を決定
+
+/* ==========================================
+   店舗表示
+========================================== */
+
+function displayShops(
+    data,
+    currentRange
+) {
+
+    const shopList =
+        document.getElementById(
+            'shop-list'
+        );
+
+
+    const hint =
+        document.getElementById(
+            'drink-hint'
+        );
+
+
+    const drinks = [
+
+        "生ビール",
+        "生ビール",
+        "生ビール",
+        "生ビール",
+        "生ビール",
+        "生ビール",
+
+        "ハイボール",
+        "ハイボール",
+        "ハイボール",
+
+        "レモンサワー",
+        "レモンサワー",
+        "レモンサワー",
+
+        "日本酒",
+
+        "焼酎",
+
+        "ウーロンハイ",
+
+        "カシオレ",
+
+        "トマトハイ"
+
+    ];
+
+
+
+    /* 一杯目 */
+
     if (hint) {
-        const randomDrink = drinks[Math.floor(Math.random() * drinks.length)];
-        hint.innerText = "一杯目は" + randomDrink;
+
+        const randomDrink =
+
+            drinks[
+                Math.floor(
+                    Math.random()
+                    * drinks.length
+                )
+            ];
+
+
+        hint.innerText =
+            "一杯目は"
+            + randomDrink;
+
     }
 
+
+
     if (!shopList) return;
+
+
     shopList.innerHTML = "";
 
-    if (!data || !data.results || !data.results.shop || data.results.shop.length === 0) {
-        shopList.innerHTML = '<p style="text-align:center;">近くにお店が見つかりませんでした。</p>';
+
+
+    if (
+        !data ||
+        !data.results ||
+        !data.results.shop ||
+        data.results.shop.length === 0
+    ) {
+
+        shopList.innerHTML =
+
+            '<p style="text-align:center;">'
+            + '近くにお店が見つかりませんでした。'
+            + '</p>';
+
+
         return;
     }
 
-    // 検索範囲を表示
-    const rangeText = document.createElement('p');
-    rangeText.style = "font-size:0.8rem; color:#666; text-align:center;　font-family: serif;";
-    rangeText.innerText = `(${currentRange}以内の結果)`;
-    shopList.appendChild(rangeText);
 
-    // 3件ランダムに抽出
-    const shops = data.results.shop.sort(() => 0.5 - Math.random()).slice(0, 3);
+
+    /* 検索距離 */
+
+    const rangeText =
+        document.createElement('p');
+
+
+    rangeText.style.cssText =
+
+        "font-size:0.8rem;"
+        + "color:#666;"
+        + "text-align:center;"
+        + "font-family:serif;";
+
+
+    rangeText.innerText =
+        `(${currentRange}以内の結果)`;
+
+
+    shopList.appendChild(
+        rangeText
+    );
+
+
+
+    /* 3店舗 */
+
+    const shops =
+
+        [...data.results.shop]
+
+        .sort(
+            () =>
+                0.5
+                - Math.random()
+        )
+
+        .slice(0, 3);
+
+
 
     shops.forEach(shop => {
-        const shopCard = document.createElement('div');
-        shopCard.className = 'shop-card';
-        shopCard.style = "display:flex; align-items:center; background:#fff; border:1px solid #1a237e; margin-bottom:10px; padding:10px; cursor:pointer; border-radius:10px;";
+
+
+        const shopCard =
+            document.createElement(
+                'div'
+            );
+
+
+        shopCard.className =
+            'shop-card';
+
+
+        shopCard.style.cssText =
+
+            "display:flex;"
+            + "align-items:center;"
+            + "background:#fff;"
+            + "border:1px solid #1a237e;"
+            + "margin-bottom:10px;"
+            + "padding:10px;"
+            + "cursor:pointer;"
+            + "border-radius:10px;"
+            + "box-sizing:border-box;";
+
+
 
         shopCard.innerHTML = `
-            <img src="${shop.photo.pc.l}" style="width:80px; height:80px; object-fit:cover; margin-right:15px; border-radius:10px;">
-            <div style="flex:1;">
-                <div class="shop-desc" style="font-weight:bold; margin-bottom:5px;">${shop.name}</div>
-                <div class="shop-desc">${shop.genre.name}<br>${shop.access}</div>
+
+            <img
+
+                src="${shop.photo.pc.l}"
+
+                style="
+                    width:80px;
+                    height:80px;
+                    object-fit:cover;
+                    margin-right:15px;
+                    border-radius:10px;
+                    flex-shrink:0;
+                "
+
+                alt="${shop.name}"
+            >
+
+
+            <div
+                style="
+                    flex:1;
+                    min-width:0;
+                "
+            >
+
+                <div
+                    class="shop-desc"
+                    style="
+                        font-weight:bold;
+                        margin-bottom:5px;
+                    "
+                >
+                    ${shop.name}
+                </div>
+
+
+                <div class="shop-desc">
+
+                    ${shop.genre.name}
+
+                    <br>
+
+                    ${shop.access}
+
+                </div>
+
             </div>
+
         `;
 
-        // お店をクリックした時の処理
-      shopCard.onclick = () => {
 
-    const missionScreen = document.getElementById("mission-screen");
 
-    fadeTransition(
-        [
-            "header",
-            ".container",
-            ".maigo-fuda",
-            "#button-container"
-        ],
-        missionScreen,
-        () => {
+        shopCard.onclick = () => {
 
-            const selectedPlace = document.getElementById("selected-shop-card");
-            selectedPlace.innerHTML = "";
-            selectedPlace.appendChild(shopCard.cloneNode(true));
 
-            document.getElementById("mission-drink-hint").innerText =
-                document.getElementById("drink-hint").innerText
-                    .replace("一杯目は", "一杯目に") + " を頼め";
+            const missionScreen =
 
-        }
-    );
+                document.getElementById(
+                    "mission-screen"
+                );
 
-};
 
-        shopList.appendChild(shopCard);
+
+            fadeTransition(
+
+                [
+
+                    "header",
+
+                    "body > .container",
+
+                    ".maigo-fuda",
+
+                    "#button-container"
+
+                ],
+
+                missionScreen,
+
+                () => {
+
+
+                    const selectedPlace =
+
+                        document.getElementById(
+                            "selected-shop-card"
+                        );
+
+
+                    selectedPlace.innerHTML =
+                        "";
+
+
+                    selectedPlace.appendChild(
+                        shopCard.cloneNode(true)
+                    );
+
+
+
+                    const firstDrink =
+
+                        document.getElementById(
+                            "drink-hint"
+                        )
+                        .innerText;
+
+
+
+                    document
+                        .getElementById(
+                            "mission-drink-hint"
+                        )
+                        .innerText =
+
+                            firstDrink
+                            .replace(
+                                "一杯目は",
+                                "一杯目に"
+                            )
+
+                            + "を頼め";
+
+                }
+
+            );
+
+        };
+
+
+        shopList.appendChild(
+            shopCard
+        );
+
     });
-}  // ← displayShops 関数の終わり（ここが抜けていたのが主な原因）
 
-// 2. 次のミッションを追加する関数
+}
+
+
+
+/* ==========================================
+   次の迷子札
+========================================== */
+
 function getNextMission() {
-    const container = document.getElementById('dynamic-mission-container');
+
+
+    const container =
+
+        document.getElementById(
+            'dynamic-mission-container'
+        );
+
+
     if (!container) return;
 
+
+
     const tasks = [
+
         "店主のおすすめを聞け",
+
         "隣の人と乾杯せよ",
+
         "本日のおすすめを注文せよ",
+
         "一番人気のつまみを頼め",
+
         "店員さんの名前を覚えろ",
+
         "揚げ物を1品頼め",
+
         "自分以外が頼んだ酒を頼め",
+
         "おすすめの日本酒を聞け",
+
         "メニューの中で<br>一番長い名前の商品を注文せよ",
+
         "呑み迷子の画面を<br>誰かに見せて説明せよ",
-        "スマホを15分間触らず味に集中せよ",
+
+        "スマホを15分間触らず<br>味に集中せよ",
+
         "メニューの1番右上の品を頼め",
+
         "一番辛いメニューを頼め",
+
         "〆の一品を注文せよ",
+
         "デザートを注文せよ",
+
         "いつもは頼まない<br>ジャンルのお酒を頼め",
+
         "ハイボールを濃いめで頼め",
+
         "ソフトドリンクを1杯挟め",
+
         "おすすめの日本酒に合うつまみを<br>店員に聞け",
+
         "隣の席の人が食べている料理を頼め",
+
         "店名の由来を聞け",
+
         "今日一番の「うまい！」を声に出せ",
-        "箸を使わずに食べられるつまみを頼め",
+
+        "箸を使わずに食べられる<br>つまみを頼め",
+
         "おしぼりを綺麗に折りたたんで置け",
+
         "店内の一番こだわっていそうな<br>装飾を撮れ",
+
         "看板の写真を撮れ",
+
         "スベっている格言が貼ってあるか<br>チェックせよ",
+
         "箸袋で箸置きを作れ",
+
         "今日一番映えてるおつまみを撮れ",
+
         "利き手と反対の手だけで<br>次のつまみを食べきれ",
+
         "箸立てや調味料入れの<br>こだわりを観察せよ"
+
     ];
 
-    // 使用済みリストから除外して候補を作成
-    let availableTasks = tasks.filter(task => !usedMissions.includes(task));
 
-    // 候補が少なくなったら使用済みリストをリセット
-    if (availableTasks.length === 0) {
+
+    let availableTasks =
+
+        tasks.filter(
+
+            task =>
+                !usedMissions.includes(
+                    task
+                )
+
+        );
+
+
+
+    if (
+        availableTasks.length === 0
+    ) {
+
         usedMissions = [];
-        availableTasks = [...tasks];
+
+        availableTasks =
+            [...tasks];
+
     }
 
-    // ランダム選択
-    const randomTask = availableTasks[Math.floor(Math.random() * availableTasks.length)];
 
-    // 使用済みに追加（最大10個まで記憶）
-    usedMissions.push(randomTask);
-    if (usedMissions.length > 10) {
-        usedMissions.shift(); // 古いものから削除
+
+    const randomTask =
+
+        availableTasks[
+
+            Math.floor(
+
+                Math.random()
+
+                * availableTasks.length
+
+            )
+
+        ];
+
+
+
+    usedMissions.push(
+        randomTask
+    );
+
+
+    if (
+        usedMissions.length > 10
+    ) {
+
+        usedMissions.shift();
+
     }
 
-    // --- 以下は既存のミッション作成部分 ---
-    const newMission = document.createElement('div');
-    newMission.className = 'mission-unit';
-    newMission.style.cssText = "margin-top:10px; border-top:1px dashed #ccc; padding-top:10px;";
 
-    const textSizeClass = randomTask.length >= 13 ? 'small-text' : '';
+
+    const newMission =
+
+        document.createElement(
+            'div'
+        );
+
+
+    newMission.className =
+        'mission-unit';
+
+
+    newMission.style.cssText =
+
+        "margin-top:10px;"
+        + "border-top:1px dashed #ccc;"
+        + "padding-top:10px;";
+
+
+
+    const plainTask =
+
+        randomTask.replace(
+            /<br\s*\/?>/gi,
+            ""
+        );
+
+
+    const textSizeClass =
+
+        plainTask.length >= 13
+
+        ? 'small-text'
+
+        : '';
+
+
 
     newMission.innerHTML = `
-        <h3 class="order-hint ${textSizeClass}">${randomTask}</h3>
+
+        <h3
+            class="
+                order-hint
+                ${textSizeClass}
+            "
+        >
+
+            ${randomTask}
+
+        </h3>
+
+
         <div class="mission-btns">
-            <img src="fail.png" class="m-img-btn" onclick="selectResult(this, false)" alt="失敗">
-            <img src="achievement.png" class="m-img-btn" onclick="selectResult(this, true)" alt="達成">
+
+
+            <img
+                src="fail.png"
+                class="m-img-btn"
+                onclick="selectResult(this, false)"
+                alt="失敗"
+            >
+
+
+            <img
+                src="achievement.png"
+                class="m-img-btn"
+                onclick="selectResult(this, true)"
+                alt="達成"
+            >
+
+
         </div>
+
     `;
 
-    container.appendChild(newMission);
-    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+
+    container.appendChild(
+        newMission
+    );
+
+
+    window.scrollTo({
+
+        top:
+            document.body.scrollHeight,
+
+        behavior:
+            'smooth'
+
+    });
+
 }
 
-// 3. データ取得
-async function fetchAndDisplay(lat, lng, rangeIndex = 1) {
-    const shopList = document.getElementById('shop-list');
-    const rangeLabels = {1: "300m", 2: "500m", 3: "1000m"};
-    if (shopList) shopList.innerHTML = `<p style="text-align:center;">${rangeLabels[rangeIndex]}圏内を探索中...</p>`;
 
-   try {
-    const response = await fetch(`/getShops?lat=${lat}&lng=${lng}&range=${rangeIndex}`);
-    const data = await response.json();
 
-    // ★ここに移動する★
-    const shopCount = data?.results?.shop?.length || 0;
-    if (shopCount < 3 && rangeIndex < 3) {
-        return fetchAndDisplay(lat, lng, rangeIndex + 1);
-    }
+/* ==========================================
+   店舗データ取得
+========================================== */
 
-    displayShops(data, rangeLabels[rangeIndex]);
-} catch (e) {
-        if (shopList) shopList.innerHTML = '<p style="text-align:center;">通信エラーが発生しました。</p>';
-    }
-}
+async function fetchAndDisplay(
+    lat,
+    lng,
+    rangeIndex = 1
+) {
 
-// 4. ガチャ開始
-function startGacha() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (pos) => fetchAndDisplay(pos.coords.latitude, pos.coords.longitude),
-            () => alert("位置情報を許可してください")
+
+    const shopList =
+
+        document.getElementById(
+            'shop-list'
         );
+
+
+    const rangeLabels = {
+
+        1: "300m",
+
+        2: "500m",
+
+        3: "1000m"
+
+    };
+
+
+    if (shopList) {
+
+        shopList.innerHTML =
+
+            `<p style="text-align:center;">`
+
+            + `${rangeLabels[rangeIndex]}圏内を探索中...`
+
+            + `</p>`;
+
     }
+
+
+
+    try {
+
+
+        const response =
+
+            await fetch(
+
+                `/getShops?lat=${lat}&lng=${lng}&range=${rangeIndex}`
+
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "店舗取得エラー"
+            );
+
+        }
+
+
+        const data =
+
+            await response.json();
+
+
+
+        const shopCount =
+
+            data
+            ?.results
+            ?.shop
+            ?.length
+            || 0;
+
+
+
+        if (
+            shopCount < 3
+            &&
+            rangeIndex < 3
+        ) {
+
+            return fetchAndDisplay(
+
+                lat,
+
+                lng,
+
+                rangeIndex + 1
+
+            );
+
+        }
+
+
+
+        displayShops(
+
+            data,
+
+            rangeLabels[
+                rangeIndex
+            ]
+
+        );
+
+
+    } catch(e) {
+
+
+        console.error(e);
+
+
+        if (shopList) {
+
+            shopList.innerHTML =
+
+                '<p style="text-align:center;">'
+                + '通信エラーが発生しました。'
+                + '</p>';
+
+        }
+
+    }
+
 }
 
-function selectResult(button, isSuccess) {
-    const parent = button.closest('.mission-btns');
+
+
+/* ==========================================
+   探索開始
+========================================== */
+
+function startGacha() {
+
+
+    if (
+        !navigator.geolocation
+    ) {
+
+        alert(
+            "この端末では位置情報を利用できません"
+        );
+
+        return;
+    }
+
+
+
+    navigator
+        .geolocation
+        .getCurrentPosition(
+
+
+            pos => {
+
+                fetchAndDisplay(
+
+                    pos.coords.latitude,
+
+                    pos.coords.longitude
+
+                );
+
+            },
+
+
+            () => {
+
+                alert(
+                    "位置情報を許可してください"
+                );
+
+            },
+
+
+            {
+
+                enableHighAccuracy: true,
+
+                timeout: 10000,
+
+                maximumAge: 60000
+
+            }
+
+        );
+
+}
+
+
+
+/* ==========================================
+   達成・失敗選択
+========================================== */
+
+function selectResult(
+    button,
+    isSuccess
+) {
+
+
+    const parent =
+
+        button.closest(
+            '.mission-btns'
+        );
+
+
     if (!parent) return;
 
-    const buttons = parent.querySelectorAll('.m-img-btn');
 
-    buttons.forEach(btn => btn.classList.remove('selected', 'dimmed'));
 
-    button.classList.add('selected');
+    const buttons =
+
+        parent.querySelectorAll(
+            '.m-img-btn'
+        );
+
+
+
     buttons.forEach(btn => {
-        if (btn !== button) {
-            btn.classList.add('dimmed');
-        }
+
+        btn.classList.remove(
+            'selected',
+            'dimmed'
+        );
+
     });
+
+
+
+    button.classList.add(
+        'selected'
+    );
+
+
+
+    buttons.forEach(btn => {
+
+        if (
+            btn !== button
+        ) {
+
+            btn.classList.add(
+                'dimmed'
+            );
+
+        }
+
+    });
+
 }
 
-// 5. リザルト画面を表示する関数
+
+
+/* ==========================================
+   リザルト表示
+========================================== */
+
 function showResult() {
 
-    // 達成と失敗の数を数える
-    const totalMissions = document.querySelectorAll('.mission-unit').length;
-    const successCount = document.querySelectorAll('.m-img-btn.selected[alt="達成"]').length;
 
-    // 履歴を生成
-    const missionsContainer = document.getElementById('result-missions-container');
-    missionsContainer.innerHTML = '';
+    const totalMissions =
 
-    document.querySelectorAll('.mission-unit').forEach(unit => {
+        document.querySelectorAll(
+            '.mission-unit'
+        ).length;
 
-        const textElement =
-            unit.querySelector('.order-hint') ||
-            unit.querySelector('h3') ||
-            unit.querySelector('p');
 
-        if (!textElement) return;
 
-        const missionText = textElement.innerText.trim();
+    const successCount =
 
-        const isSuccess =
-            unit.querySelector('.m-img-btn.selected[alt="達成"]') !== null;
+        document.querySelectorAll(
+            '.m-img-btn.selected[alt="達成"]'
+        ).length;
 
-        const item = document.createElement('div');
-        item.classList.add('result-mission-item');
 
-        if (isSuccess) {
 
-            item.innerHTML = `
-                <img src="stamp.png" class="result-stamp" alt="達成">
-                <span class="result-mission-text">${missionText}</span>
-            `;
+    const missionsContainer =
 
-        } else {
+        document.getElementById(
+            'result-missions-container'
+        );
 
-            item.classList.add('failed');
 
-            item.innerHTML = `
-                <span class="result-mission-text">${missionText}</span>
-            `;
-        }
+    missionsContainer.innerHTML =
+        '';
 
-        missionsContainer.appendChild(item);
 
-    });
 
-    // リザルト上部（お店情報は表示しない）
-    document.getElementById('result-summary').innerHTML = `
-        <p style="font-size:1.5rem;color:#1a237e;font-weight:bold;margin-bottom:0;">
-            ミッション達成率：${successCount} / ${totalMissions}
-        </p>
-    `;
+    document
+        .querySelectorAll(
+            '.mission-unit'
+        )
+        .forEach(unit => {
 
-    // 前回のメッセージが残っていたら削除
-    document.querySelector('.result-message')?.remove();
 
-    // メッセージ追加
-    missionsContainer.insertAdjacentHTML(
-        'afterend',
-        `
-        <div class="result-message">
-            ${
-                successCount === totalMissions
-                ?
-                `<p style="margin-top:0;text-align:center;line-height:1.6;">
-                    パーフェクト！<br>
-                    完璧な呑みっぷり！
-                </p>`
-                :
-                `<p style="margin-top:35px;font-size:1.35rem;text-align:center;line-height:1.6;">
-                    お疲れ様！<br>
-                    もう一軒行こ！
-                </p>`
+            const textElement =
+
+                unit.querySelector(
+                    '.order-hint'
+                )
+
+                ||
+
+                unit.querySelector(
+                    'h3'
+                )
+
+                ||
+
+                unit.querySelector(
+                    'p'
+                );
+
+
+            if (!textElement) return;
+
+
+
+            const missionText =
+
+                textElement
+                .innerText
+                .trim();
+
+
+
+            const isSuccess =
+
+                unit.querySelector(
+                    '.m-img-btn.selected[alt="達成"]'
+                )
+
+                !== null;
+
+
+
+            const item =
+
+                document.createElement(
+                    'div'
+                );
+
+
+            item.classList.add(
+                'result-mission-item'
+            );
+
+
+
+            if (isSuccess) {
+
+
+                item.innerHTML = `
+
+                    <img
+                        src="stamp.png"
+                        class="result-stamp"
+                        alt="達成"
+                    >
+
+                    <span
+                        class="result-mission-text"
+                    >
+                        ${missionText}
+                    </span>
+
+                `;
+
+
+            } else {
+
+
+                item.classList.add(
+                    'failed'
+                );
+
+
+                item.innerHTML = `
+
+                    <span
+                        class="result-mission-text"
+                    >
+                        ${missionText}
+                    </span>
+
+                `;
+
             }
-        </div>
-        `
-    );
 
-   // フェード切り替え
+
+
+            missionsContainer
+                .appendChild(
+                    item
+                );
+
+        });
+
+
+
+    /*
+     ★リザルトにお店名を表示しない
+    */
+
+    document
+        .getElementById(
+            'result-summary'
+        )
+        .innerHTML = `
+
+            <p
+                style="
+                    font-size:1.5rem;
+                    color:#1a237e;
+                    font-weight:bold;
+                    margin-bottom:0;
+                "
+            >
+
+                ミッション達成率：
+                ${successCount}
+                /
+                ${totalMissions}
+
+            </p>
+
+        `;
+
+
+
+    document
+        .querySelector(
+            '.result-message'
+        )
+        ?.remove();
+
+
+
+    missionsContainer
+        .insertAdjacentHTML(
+
+            'afterend',
+
+            `
+
+                <div class="result-message">
+
+                    ${
+                        successCount
+                        ===
+                        totalMissions
+
+                        ?
+
+                        `
+                        <p
+                            style="
+                                margin-top:0;
+                                text-align:center;
+                                line-height:1.6;
+                            "
+                        >
+                            パーフェクト！
+                            <br>
+                            完璧な呑みっぷり！
+                        </p>
+                        `
+
+                        :
+
+                        `
+                        <p
+                            style="
+                                margin-top:35px;
+                                font-size:1.35rem;
+                                text-align:center;
+                                line-height:1.6;
+                            "
+                        >
+                            お疲れ様！
+                            <br>
+                            もう一軒行こ！
+                        </p>
+                        `
+                    }
+
+                </div>
+
+            `
+
+        );
+
+
+
+    /*
+     ★お店関連だけを消す
+
+     result.pngは消さない
+    */
+
     fadeTransition(
+
         [
+
             '#first-mission-unit',
+
             '#dynamic-mission-container',
+
             '.footer-btns',
+
             '#selected-shop-card',
-            '#selected-shop-title' // お店タイトルだけ非表示
+
+            '#mission-shop-title',
+
+            '#mission-plate-title'
+
         ],
-        document.getElementById('result-screen')
+
+        document.getElementById(
+            'result-screen'
+        )
+
     );
 
 }
-// 6. Xに結果を投稿する
+
+
+
+/* ==========================================
+   Xへポスト
+========================================== */
+
 function shareToX() {
-    const totalMissions = document.querySelectorAll('.mission-unit').length;
-    const successCount = document.querySelectorAll('.m-img-btn.selected[alt="達成"]').length;
 
-    const text = `呑み迷子で遊びました！\nミッション達成率：${successCount} / ${totalMissions}\n\n#呑み迷子`;
-    const siteUrl = 'https://nomi-maigo.pages.dev/';
-    const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(siteUrl)}`;
 
-    window.open(shareUrl, '_blank', 'noopener,noreferrer');
+    const totalMissions =
+
+        document.querySelectorAll(
+            '.mission-unit'
+        ).length;
+
+
+
+    const successCount =
+
+        document.querySelectorAll(
+            '.m-img-btn.selected[alt="達成"]'
+        ).length;
+
+
+
+    const text =
+
+        `呑み迷子してきました！\n`
+        +
+        `ミッション達成率：${successCount}/${totalMissions}\n\n`
+        +
+        `#呑み迷子`;
+
+
+
+    const pageUrl =
+
+        'https://nomi-maigo.pages.dev/';
+
+
+
+    const shareUrl =
+
+        'https://twitter.com/intent/tweet'
+
+        + '?text='
+        + encodeURIComponent(text)
+
+        + '&url='
+        + encodeURIComponent(pageUrl);
+
+
+
+    window.open(
+
+        shareUrl,
+
+        '_blank',
+
+        'noopener,noreferrer'
+
+    );
+
 }
+
 
 </script>
 
-<footer style="text-align: center; margin-top: 50px; margin-bottom: 20px; font-family: sans-serif; font-size: 0.8rem; color: #666;">
+
+
+<footer
+    style="
+        text-align:center;
+        margin-top:50px;
+        margin-bottom:20px;
+        font-family:sans-serif;
+        font-size:0.8rem;
+        color:#666;
+    "
+>
+
     <p>
-        Powered by <a href="http://webservice.recruit.co.jp/" target="_blank" rel="noopener" style="color: #666; text-decoration: underline;">ホットペッパーグルメ Webサービス</a>
+
+        Powered by
+
+        <a
+            href="http://webservice.recruit.co.jp/"
+            target="_blank"
+            rel="noopener"
+            style="
+                color:#666;
+                text-decoration:underline;
+            "
+        >
+            ホットペッパーグルメ Webサービス
+        </a>
+
     </p>
+
 </footer>
+
+
+</body>
+</html>
