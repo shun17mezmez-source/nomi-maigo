@@ -807,6 +807,39 @@
             opacity: 1;
         }
 
+
+
+        /* ==========================================
+           リザルト文字フォント
+        ========================================== */
+
+        #result-summary,
+        .result-message,
+        .result-mission-item,
+        .result-mission-text {
+            font-family:
+                "ab-ootori",
+                sans-serif
+                !important;
+
+            font-style: normal;
+            font-weight: 400;
+        }
+
+        /* 最初の画面「どこで呑む？」 */
+        #shop-hint {
+            font-family:
+                "ab-ootori",
+                sans-serif
+                !important;
+
+            font-style: normal;
+            font-weight: 400;
+            font-size: 30px;
+            margin: 10px 0 5px;
+            white-space: nowrap;
+        }
+
     </style>
 
 
@@ -1089,7 +1122,7 @@
 
 <!-- 店舗候補 -->
 
-<div class="container">
+<div id="shop-container" class="container">
 
     <div class="section-title-img">
 
@@ -1100,6 +1133,9 @@
 
     </div>
 
+    <div id="shop-hint" class="order-hint">
+        どこで呑む？
+    </div>
 
     <div id="shop-list"></div>
 
@@ -1125,7 +1161,7 @@
         id="drink-hint"
         class="order-hint"
     >
-        一杯目、何飲む？
+        一杯目、何呑む？
     </div>
 
 </div>
@@ -1504,7 +1540,7 @@ function displayShops(
 
                     "header",
 
-                    "body > .container",
+                    "#shop-container",
 
                     ".maigo-fuda",
 
